@@ -6,6 +6,25 @@ Dot AI provides a tool-agnostic way to create and manage context when coding AI 
 
 The framework includes a structured development workflow that guides projects from initialization through feature development and validation, ensuring consistent quality and comprehensive documentation.
 
+## Workflow Overview
+
+```mermaid
+flowchart TD
+    A[1. Bootstrap Project] --> B[2. Define Context & Requirements]
+    B --> C[3. Create & Document Feature]
+    C --> D[4. Implement Feature]
+    D --> E[5. Validate Against Standards]
+    E --> F{Validation Passed?}
+    F -->|No| G[7. Revise Feature]
+    G --> E
+    F -->|Yes| H[6. Create Validation Report]
+    H --> I[8. Fact Compliance Review]
+    I --> J[Feature Complete]
+    J -.-> C[Start Next Feature]
+```
+
+This workflow ensures that all features are properly documented, implemented according to standards, and validated before being considered complete. Each step includes preflight and post-flight hooks that automate validation against established facts and standards.
+
 ## Directory Structure
 
 The `.ai` directory serves as a standardized location for AI-related context, documentation, and resources. This structure helps maintain consistent organization across projects and enables AI tools to easily locate and utilize project context.
