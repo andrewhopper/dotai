@@ -14,17 +14,27 @@ The `.ai` directory serves as a standardized location for AI-related context, do
 .ai/
 └── docs/
     ├── 0-ai-config/                # AI tool configuration
+    │   ├── workflow.md             # Development workflow documentation
     │   ├── mcp.md                  # Model Context Protocol configuration
     │   ├── .cursorrules            # Cursor AI rules
     │   └── .clinerules             # Cline AI rules
+    ├── 1-context/                  # Project context documentation
+    │   ├── project_context.md      # Project scope and goals
+    │   ├── project_conventions.md  # Project-specific conventions
+    │   ├── target-personas/        # Target user documentation
+    │   └── standards/              # Applicable standards
     ├── 2-technical-design/         # Technical design documentation
     │   ├── development_workflow/   # Development process documentation
     │   │   └── workflow.md         # Standardized workflow with Mermaid diagram
-    │   └── requirements/           # Project requirements
-    │       └── security/           # Security requirements
-    │           └── ssl_requirements.md # SSL implementation requirements
+    │   ├── requirements/           # Project requirements
+    │   │   └── security/           # Security requirements
+    │   │       └── ssl_requirements.md # SSL implementation requirements
+    │   └── features/               # Feature specifications
+    │       └── [feature-name]/     # Individual feature documentation
+    │           └── specification.md # Feature specification
     ├── 3-development/              # Development documentation
-    │   └── folder-locks.md         # Folder lock documentation
+    │   ├── folder-locks.md         # Folder lock documentation
+    │   └── tasklog/                # AI assistance documentation
     └── 4-acceptence/               # Acceptance and validation
         └── compliance_reports/     # Compliance and validation reports
             └── security/           # Security compliance reports
@@ -34,10 +44,25 @@ The `.ai` directory serves as a standardized location for AI-related context, do
 ### Key Components
 
 #### docs/0-ai-config/
-Contains configuration files for AI tools, including Model Context Protocol settings and rules for specific AI assistants like Cursor and Cline.
+Contains configuration files for AI tools, including workflow documentation, Model Context Protocol settings, and rules for specific AI assistants like Cursor and Cline.
+
+#### docs/1-context/
+Houses project context documentation, including project scope, conventions, target personas, and applicable standards.
+
+##### docs/1-context/project_context.md
+Documents the project's scope, goals, and context to provide AI tools with the necessary background information.
+
+##### docs/1-context/project_conventions.md
+Defines project-specific conventions, coding standards, and practices to ensure consistency.
+
+##### docs/1-context/target-personas/
+Contains documentation about the target users or personas for the project, helping to guide design and development decisions.
+
+##### docs/1-context/standards/
+Houses documentation on applicable standards, best practices, and requirements that the project must adhere to.
 
 #### docs/2-technical-design/
-Houses technical design documentation, including development workflows and project requirements.
+Contains technical design documentation, including development workflows, project requirements, and feature specifications.
 
 ##### docs/2-technical-design/development_workflow/
 Documents the standardized development process and workflow for projects using the Dot AI framework. This includes step-by-step guides, best practices, and workflow diagrams to ensure consistent development practices.
@@ -45,8 +70,17 @@ Documents the standardized development process and workflow for projects using t
 ##### docs/2-technical-design/requirements/
 Stores detailed requirements for various aspects of the project, organized by category (e.g., security, performance, accessibility).
 
+##### docs/2-technical-design/features/
+Stores feature specifications, organized by feature name. Each feature has its own directory containing detailed documentation.
+
 #### docs/3-development/
-Contains documentation related to the development process, including folder lock documentation that specifies which folders should not be modified by AI tools.
+Contains documentation related to the development process, including folder lock documentation and AI assistance logs.
+
+##### docs/3-development/folder-locks.md
+Specifies which folders should not be modified by AI tools, ensuring critical parts of the codebase remain under human control.
+
+##### docs/3-development/tasklog/
+Records AI assistance activities, providing a history of AI interactions and decisions made during development.
 
 #### docs/4-acceptence/
 Houses acceptance criteria, validation reports, and compliance documentation.
