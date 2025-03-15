@@ -1,0 +1,1 @@
+Folders can be locked, ask for approval, or editable.
