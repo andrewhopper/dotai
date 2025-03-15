@@ -49,19 +49,19 @@ The Dot AI workflow integrates with the hivemind knowledge base to ensure all de
 
 ### Fact Categories
 
-Facts are organized into categories that align with different aspects of development:
-- **FRONTEND**: UI frameworks, component libraries, styling approaches
-- **BACKEND**: Server frameworks, API patterns, service architecture
-- **DATABASE**: Database systems, ORM tools, data modeling practices
+Facts are organized into categories that align with different aspects of development; here are some examples:
+- **FRONTEND**: UI frameworks, component libraries, styling approaches (Next.js 15, React 18, Tailwind, ShadCN)
+- **BACKEND**: Server frameworks, API patterns, service architecture (Python patterns, SQLAlchemy, Pydantic, FastCGI)
+- **DATABASE**: Database systems, ORM tools, data modeling practices (PostgreSQL, Prisma ORM)
 - **FULL_STACK**: Cross-cutting concerns and full-stack patterns
 - **DESIGN_PATTERN**: Software design patterns and principles
-- **ARCHITECTURE_PATTERN**: System architecture patterns and decisions
-- **TESTING_PATTERN**: Testing strategies and methodologies
-- **PROJECT_STRUCTURE**: Directory organization and file naming
-- **CODE_STYLE**: Formatting, naming conventions, and style guides
-- **DEPLOYMENT**: Deployment strategies and environments
+- **ARCHITECTURE_PATTERN**: System architecture patterns and decisions (MVC, event-driven architecture)
+- **TESTING_PATTERN**: Testing strategies and methodologies (Jest, test data management)
+- **PROJECT_STRUCTURE**: Directory organization and file naming (Next.js src directory structure, monorepo standards)
+- **CODE_STYLE**: Formatting, naming conventions, and style guides (TypeScript configuration, ESLint/Prettier)
+- **DEPLOYMENT**: Deployment strategies and environments (AWS Route 53)
 - **SECURITY**: Security practices and requirements
-- **DOCUMENTATION**: Documentation standards and requirements
+- **DOCUMENTATION**: Documentation standards and requirements (README, ADRs, Changelog)
 
 ### Fact Strictness Levels
 
@@ -189,8 +189,21 @@ Brief description of the feature
 ## Design Considerations
 Notes on implementation approach
 
+## Technology Stack
+- Frontend: [e.g., Next.js 15, React 18, Tailwind, ShadCN]
+- Backend: [e.g., Python, SQLAlchemy, Pydantic]
+- Database: [e.g., PostgreSQL, Prisma ORM]
+
 ## Applicable Standards
 - Link to relevant standards
+- Reference to specific hivemind facts:
+  - REQUIRED: [list of required facts this feature must comply with]
+  - RECOMMENDED: [list of recommended facts this feature should comply with]
+
+## Fact Compliance Considerations
+- Note any potential challenges in meeting fact requirements
+- Document any approved exceptions to RECOMMENDED facts
+- Outline validation approach for critical facts
 ```
 
 ### 4. Implement Feature
@@ -250,10 +263,25 @@ Verify that the implementation meets all applicable standards:
 
 **Validation Checklist:**
 - Code quality standards
+  - TypeScript configuration (strict mode, proper tsconfig.json)
+  - ESLint/Prettier compliance
+  - Naming conventions and code organization
+- Technology-specific standards
+  - Frontend: Next.js 15 with App Router, React 18, Tailwind, ShadCN
+  - Backend: Python patterns, SQLAlchemy, Pydantic, FastCGI
+  - Database: PostgreSQL, Prisma ORM
+- Project structure requirements
+  - Next.js src directory structure
+  - Monorepo standards (if applicable)
+- Testing standards
+  - Jest testing configuration
+  - Test data management
+  - Coverage thresholds
 - Security requirements
 - Performance benchmarks
 - Accessibility compliance
 - Feature-specific requirements
+- Licensing and ownership verification
 
 ### 6. Create Validation Report
 
@@ -284,7 +312,16 @@ Document the validation results:
 - Summary of validation
 - Test environment details
 - Results against each standard
+  - Technology-specific compliance (Next.js, React, Tailwind, etc.)
+  - Code quality standards compliance
+  - Testing standards compliance
+  - Project structure compliance
+- Fact compliance summary
+  - REQUIRED facts status (pass/fail)
+  - RECOMMENDED facts status (pass/fail/exception)
+  - Fact violation details and remediation steps
 - Issues found (if any)
+- Exception justifications (for RECOMMENDED fact violations)
 - Conclusion and approval
 
 ### 7. Revise Feature (if needed)
@@ -426,3 +463,14 @@ async function validateAgainstFacts(content: string, facts: Fact[]): Promise<Val
     results
   };
 }
+```
+
+### Benefits of Hooks
+
+- **Consistency**: Ensures all prerequisite checks and validations happen every time
+- **Automation**: Reduces manual steps and human error
+- **Traceability**: Creates audit trail of checks and validations
+- **Quality**: Enforces standards throughout the development process
+- **Efficiency**: Catches issues early when they're easier to fix
+
+By following this structured workflow with preflight and post-flight hooks, teams can ensure consistent quality, proper documentation, and effective collaboration with AI tools throughout the development process.
