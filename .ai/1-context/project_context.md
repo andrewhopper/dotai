@@ -1,5 +1,7 @@
 # Project Context Document
 
+Type of project: quick prototype, semi-production code, full production code
+
 ## 1. Project Overview
 - **Project Name**: 
 - **Domain**: 

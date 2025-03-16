@@ -33,7 +33,7 @@ The `.ai` directory serves as a standardized location for AI-related context, do
 .ai/
 └── docs/
     ├── 0-ai-config/                # AI tool configuration
-    │   ├── workflow.md             # Development workflow documentation
+    │   ├── workflow.md             # Development workflow 
     │   ├── mcp.md                  # Model Context Protocol configuration
     │   ├── .cursorrules            # Cursor AI rules
     │   └── .clinerules             # Cline AI rules
