@@ -1,0 +1,1 @@
+e.g. edge deployment, mobile device, etc

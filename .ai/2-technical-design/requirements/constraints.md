@@ -1,0 +1,1 @@
+e.g. must run on edge, must be PCI compliant
