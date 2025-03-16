@@ -32,6 +32,10 @@ flowchart TD
 
 This workflow ensures that all features are properly documented, implemented according to standards, and validated before being considered complete. Each step includes preflight and post-flight hooks that automate validation against established facts and standards.
 
+## How can I use this?
+
+Fill out your project details in the various folders.  Drop the .cursorrules/.clinerules prompts into your system project, root dir, or settings.  Then Cursor/Cline will refer to these requirements and automatically document your project.
+
 ## Directory Structure
 
 The `.ai` directory serves as a standardized location for AI-related context, documentation, and resources. This structure helps maintain consistent organization across projects and enables AI tools to easily locate and utilize project context.
