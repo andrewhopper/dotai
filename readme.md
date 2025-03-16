@@ -16,18 +16,20 @@ The framework includes a structured development workflow that guides projects fr
 ## Workflow Overview
 ```mermaid
 flowchart TD
-    A[1. Bootstrap Project] --> B[2. Define Context]
-    B --> C[3. Document Feature]
-    C --> D[4. Implement Feature]
-    D --> E[5. Validate Standards]
+    A[Step 1: Bootstrap Project] --> B[Step 2: Define Context]
+    B --> C[Step 3: Document Feature]
+    C --> D[Step 4: Implement Feature]
+    D --> E[Step 5: Validate Standards]
     E --> F{Validation Passed?}
-    F -->|No| G[7. Revise Feature]
+    F -->|No| G[Step 7: Revise Feature]
     G --> E
-    F -->|Yes| H[6. Validation Report]
-    H --> I[8. Compliance Review]
+    F -->|Yes| H[Step 6: Validation Report]
+    H --> I[Step 8: Compliance Review]
     I --> J[Feature Complete]
     J -.-> C[Start Next Feature]
 ```
+```
+
 
 This workflow ensures that all features are properly documented, implemented according to standards, and validated before being considered complete. Each step includes preflight and post-flight hooks that automate validation against established facts and standards.
 
@@ -72,11 +74,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Roadmap
 
-* Create NPM CLI to configure repos for AI
-* Create MCP server to manage and maintain context
+- Create NPM CLI to configure repos for AI
+- Create MCP server to manage and maintain context
+- Create NPM CLI that will walk users through configuring their apps
 
 ## Creator
 
-Andrew Hopper
-x.com/andrewhopper
-linkedin.com/in/andrewhopper
+Andrew Hopper  
+[Twitter/X](https://x.com/andrewhopper)  
+[LinkedIn](https://linkedin.com/in/andrewhopper)
