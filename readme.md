@@ -80,6 +80,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Create NPM CLI to configure repos for AI
 - Create MCP server to manage and maintain context
 - Create NPM CLI that will walk users through configuring their apps
+- Create implementation plans for each feature with an impact/risk metrics and then adjust levels of human guidance based on the expected risk associated with a set of proposed changes.
 
 ## Creator
 
