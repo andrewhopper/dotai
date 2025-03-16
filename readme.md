@@ -27,6 +27,7 @@ flowchart TD
     H --> I[8. Compliance Review]
     I --> J[Feature Complete]
     J -.-> C[Start Next Feature]
+```
 
 This workflow ensures that all features are properly documented, implemented according to standards, and validated before being considered complete. Each step includes preflight and post-flight hooks that automate validation against established facts and standards.
 
