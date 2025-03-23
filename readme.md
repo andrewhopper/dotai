@@ -76,7 +76,7 @@ The `.ai` directory serves as a standardized location for AI-related context, do
 See the following research documents for more information:
 
 - [Coding Workflows](research/coding-workflows.md) - Research on Cursor rules and Cline best practices
-- [MCP Research](research/mcp-research.md) - Research on Model Context Protocol implementation and best practices
+- [MCP Research](research/mcp-servers.md) - Research on Model Context Protocol implementation and best practices
 
 
 ## License
