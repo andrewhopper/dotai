@@ -71,6 +71,14 @@ The `.ai` directory serves as a standardized location for AI-related context, do
                 └── 2025-03-13_ssl.md # SSL implementation validation
 ```
 
+## Research
+
+See the following research documents for more information:
+
+- [Coding Workflows](research/coding-workflows.md) - Research on Cursor rules and Cline best practices
+- [MCP Research](research/mcp-research.md) - Research on Model Context Protocol implementation and best practices
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
