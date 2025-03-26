@@ -1,4 +1,14 @@
 <!------------- -Main documentation file------------- -->
+```bash
+# This is for @Andrew Hooper -:
+cd dotai
+npm install 
+npx dotai init
+.
+.
+.
+npx dotai --help
+```
 
 ## Template Usage
 
