@@ -1,0 +1,27 @@
+{
+    "name": "dotai-cli",
+    "version": "0.1.0",
+    "description": "CLI tool for integrating Dot AI structure into repositories",
+    "main": "index.js",
+    "bin": {
+        "dotai": "./bin/dotai.js"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "ai",
+        "cli",
+        "structure",
+        "organization"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "commander": "^9.4.1",
+        "inquirer": "^8.2.5",
+        "fs-extra": "^11.1.0",
+        "chalk": "^4.1.2",
+        "ora": "^5.4.1"
+    }
+}
