@@ -34,6 +34,28 @@ async function initCommand(options) {
                 default: false
             }
         ]);
+
+        // Additional questions for better template customization
+        if (config.includeExamples) {
+            const additionalConfig = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'projectType',
+                    message: 'What type of project is this?',
+                    choices: ['quick prototype', 'semi-production code', 'full production code'],
+                    default: 'semi-production code'
+                },
+                {
+                    type: 'input',
+                    name: 'projectDomain',
+                    message: 'What is the domain/industry of your project?',
+                    default: 'Technology'
+                }
+            ]);
+
+            // Merge the additional configuration
+            config = { ...config, ...additionalConfig };
+        }
     } else {
         // Use defaults
         config = {
