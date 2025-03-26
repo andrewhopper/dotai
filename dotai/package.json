@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "description": "CLI tool for integrating Dot AI structure into repositories",
     "main": "index.js",
+    "type": "module",
     "bin": {
         "dotai": "./bin/dotai.js"
     },

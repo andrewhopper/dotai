@@ -1,8 +1,17 @@
-const { program } = require('commander');
-const initCommand = require('../src/commands/init');
-const addCommand = require('../src/commands/add');
-const validateCommand = require('../src/commands/validate');
-const packageJson = require('../package.json');
+#!/usr/bin/env node
+
+import { program } from 'commander';
+import initCommand from '../src/commands/init';
+import addCommand from '../src/commands/add';
+import validateCommand from '../src/commands/validate';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf8'));
 
 program
     .name('dotai')
