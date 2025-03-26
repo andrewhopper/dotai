@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import initCommand from '../src/commands/init';
-import addCommand from '../src/commands/add';
-import validateCommand from '../src/commands/validate';
+import initCommand from '../src/commands/init.js';
+import addCommand from '../src/commands/add.js';
+import validateCommand from '../src/commands/validate.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';

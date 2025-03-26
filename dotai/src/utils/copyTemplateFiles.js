@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 async function copyTemplateFiles(config) {
   const templatesDir = path.join(__dirname, '..', 'templates');
@@ -53,4 +53,4 @@ function processTemplateContent(content, config) {
     .replace(/\{\{createdDate\}\}/g, new Date().toISOString().split('T')[0]);
 }
 
-module.exports = copyTemplateFiles;
+export default copyTemplateFiles;

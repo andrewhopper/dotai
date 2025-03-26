@@ -1,11 +1,11 @@
-const inquirer = require('inquirer');
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const ora = require('ora');
+import inquirer from 'inquirer';
+import fs from 'fs-extra';
+import path from 'path';
+import chalk from 'chalk';
+import ora from 'ora';
 
-const createDirectoryStructure = require('../utils/createDirectoryStructure');
-const copyTemplateFiles = require('../utils/copyTemplateFiles');
+import createDirectoryStructure from '../utils/createDirectoryStructure.js';
+import copyTemplateFiles from '../utils/copyTemplateFiles.js';
 
 async function initCommand(options) {
     console.log(chalk.blue('📁 Initializing Dot AI structure...'));
@@ -110,4 +110,4 @@ async function updateGitignore() {
     }
 }
 
-module.exports = initCommand;
+export default initCommand;
