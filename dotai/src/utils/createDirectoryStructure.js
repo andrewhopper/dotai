@@ -1,26 +1,31 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 async function createDirectoryStructure(config) {
-    const baseDir = path.join(process.cwd(), '.ai');
-
     // Create main .ai directory
-    await fs.ensureDir(baseDir);
+    const aiDir = path.join(process.cwd(), '.ai');
+    await fs.ensureDir(aiDir);
 
-    // Create subdirectories
-    const directories = [
+    // Create standard subdirectories
+    const dirs = [
         '0-ai-config',
         '1-context',
         '2-technical-design',
+        '2-technical-design/requirements',
+        '2-technical-design/integrations',
         '3-development',
-        '4-acceptance-reports'
+        '3-development/implementation',
+        '3-development/product',
+        '4-acceptance-reports',
+        '4-acceptance-reports/security',
     ];
 
-    for (const dir of directories) {
-        await fs.ensureDir(path.join(baseDir, dir));
+    // Create each directory
+    for (const dir of dirs) {
+        await fs.ensureDir(path.join(aiDir, dir));
     }
 
     return true;
 }
 
-module.exports = createDirectoryStructure;
+export default createDirectoryStructure;

@@ -1,11 +1,11 @@
-const inquirer = require('inquirer');
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const ora = require('ora');
+import inquirer from 'inquirer';
+import fs from 'fs-extra';
+import path from 'path';
+import chalk from 'chalk';
+import ora from 'ora';
 
-const createDirectoryStructure = require('../utils/createDirectoryStructure');
-const copyTemplateFiles = require('../utils/copyTemplateFiles');
+import createDirectoryStructure from '../utils/createDirectoryStructure.js';
+import copyTemplateFiles from '../utils/copyTemplateFiles.js';
 
 async function initCommand(options) {
     console.log(chalk.blue('📁 Initializing Dot AI structure...'));
@@ -34,6 +34,28 @@ async function initCommand(options) {
                 default: false
             }
         ]);
+
+        // Additional questions for better template customization
+        if (config.includeExamples) {
+            const additionalConfig = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'projectType',
+                    message: 'What type of project is this?',
+                    choices: ['quick prototype', 'semi-production code', 'full production code'],
+                    default: 'semi-production code'
+                },
+                {
+                    type: 'input',
+                    name: 'projectDomain',
+                    message: 'What is the domain/industry of your project?',
+                    default: 'Technology'
+                }
+            ]);
+
+            // Merge the additional configuration
+            config = { ...config, ...additionalConfig };
+        }
     } else {
         // Use defaults
         config = {
@@ -88,4 +110,4 @@ async function updateGitignore() {
     }
 }
 
-module.exports = initCommand;
+export default initCommand;
