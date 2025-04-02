@@ -20,7 +20,12 @@ program
 
 program
     .command('init')
-    .description('Initialize Dot AI structure in the current directory')
+    .description('Initialize Dot AI structure in the current directory. Interactively gathers information about:\n' +
+        '  - Project basics (name, examples, git configuration)\n' +
+        '  - Target users and personas\n' +
+        '  - Security requirements and features\n' +
+        '  - Performance and scalability targets\n' +
+        '  - Compliance standards')
     .option('-y, --yes', 'Skip all prompts and use defaults')
     .option('-t, --template <template>', 'Use specific template', 'default')
     .action(initCommand);
