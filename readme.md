@@ -43,20 +43,20 @@ Show hidden files on OS X
 ```
 defaults write com.apple.finder AppleShowAllFiles -bool true
 killall Finder
-``
+```
 
 ```
 git clone git@github.com:andrewhopper/dotai.git
 cd dotai
-npm install
-npm install -g . (install the CLI globally)
+npm install # install the packages
+npm install -g . # install the CLI globally
 ```
 
 # CLI Usage
 ```
 switch to your project dir
-cd ~/dev/proj1
-dotai init
+e.g. cd ~/dev/proj1
+dotai init # this will allow you interactively configure your project
 ```
 
 ## Directory Structure
