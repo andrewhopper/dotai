@@ -36,6 +36,22 @@ This workflow ensures that all features are properly documented, implemented acc
 
 Fill out your project details in the various folders.  Drop the .cursorrules/.clinerules prompts into your system project, root dir, or settings.  Then Cursor/Cline will refer to these requirements and automatically document your project.
 
+# CLI Installation
+
+```
+git clone git@github.com:andrewhopper/dotai.git
+cd dotai
+npm install
+npm install -g . (install the CLI globally)
+```
+
+# CLI Usage
+```
+switch to your project dir
+cd ~/dev/proj1
+dotai init
+```
+
 ## Directory Structure
 
 The `.ai` directory serves as a standardized location for AI-related context, documentation, and resources. This structure helps maintain consistent organization across projects and enables AI tools to easily locate and utilize project context.
