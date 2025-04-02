@@ -1,0 +1,278 @@
+{
+    "ai_documentation": {
+        "0-ai-config": {
+            "description": "Configuration files and rules for AI tooling, including CLI and Cursor IDE settings",
+            "files": [
+                {
+                    "key": "CFG-CLIRULES",
+                    "name": ".clinerules",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-CURSORRULES",
+                    "name": ".cursorrules",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-001",
+                    "name": "CFG-template-001.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-HOOKS",
+                    "name": "hooks.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-MCP",
+                    "name": "mcp.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-RESOLVERS",
+                    "name": "resolvers.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CFG-WORKFLOW",
+                    "name": "workflow.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                }
+            ]
+        },
+        "1-context": {
+            "description": "Project context, conventions, and user-focused documentation that defines the project's scope and goals",
+            "files": [
+                {
+                    "key": "CTX-001",
+                    "name": "CTX-project-info-001.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CTX-PROJECT",
+                    "name": "project_context.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CTX-CONVENTIONS",
+                    "name": "project_conventions.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                },
+                {
+                    "key": "CTX-USERS",
+                    "name": "target-users.md",
+                    "last_modified": "2025-03-26T22:52:40Z",
+                    "file_state": "PRESENT"
+                }
+            ]
+        },
+        "2-technical-design": {
+            "description": "Technical architecture, design decisions, and system requirements documentation",
+            "root": {
+                "description": "High-level architectural documents and environment configurations",
+                "files": [
+                    {
+                        "key": "ARCH-001",
+                        "name": "ARCH-auth-feature-001.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "ARCH-ENVS",
+                        "name": "environments_deployments.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "architecture": {
+                "description": "Detailed architectural standards and development conventions",
+                "files": [
+                    {
+                        "key": "ARCH-STANDARDS",
+                        "name": "current_arch_standards.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "ARCH-CONVENTIONS",
+                        "name": "dev-conventions.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "integrations": {
+                "description": "Documentation for third-party service integrations and external system connections",
+                "files": [
+                    {
+                        "key": "INT-ANALYTICS",
+                        "name": "analytics.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "INT-AUTH",
+                        "name": "auth.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "INT-MESSAGING",
+                        "name": "messaging.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "INT-OBSERVABILITY",
+                        "name": "observability.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "INT-PAYMENTS",
+                        "name": "payments.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "requirements": {
+                "description": "Non-functional requirements and system constraints documentation",
+                "files": [
+                    {
+                        "key": "REQ-BACKUP",
+                        "name": "backup-recovery.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-SUPPORT",
+                        "name": "client-support.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-COMPLIANCE",
+                        "name": "compliance.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-CONSTRAINTS",
+                        "name": "constraints.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-DEPLOYMENT",
+                        "name": "deployment-constraints.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-OBSERVABILITY",
+                        "name": "observability.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-PERFORMANCE",
+                        "name": "performance.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-RELIABILITY",
+                        "name": "reliability.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-SCALABILITY",
+                        "name": "scalability.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
+                        "key": "REQ-SECURITY",
+                        "name": "security.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            }
+        },
+        "3-development": {
+            "description": "Development-related documentation including implementation details and product requirements",
+            "root": {
+                "description": "Development process and workflow documentation",
+                "files": [
+                    {
+                        "key": "DEV-LOCKS",
+                        "name": "folder-locks.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "implementation": {
+                "description": "Detailed implementation guides and technical specifications",
+                "files": [
+                    {
+                        "key": "DEV-001",
+                        "name": "DEV-auth-implementation-001.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "product": {
+                "description": "Product requirement documents and feature specifications",
+                "files": [
+                    {
+                        "key": "PRD-001",
+                        "name": "PRD-login-feature-001.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            }
+        },
+        "4-acceptance-reports": {
+            "description": "Quality assurance and acceptance testing documentation",
+            "root": {
+                "description": "General QA reports and acceptance criteria",
+                "files": [
+                    {
+                        "key": "QA-001",
+                        "name": "QA-security-report-001.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            },
+            "security": {
+                "description": "Security-specific testing and compliance reports",
+                "files": [
+                    {
+                        "key": "QA-002",
+                        "name": "2025-03-13_ssl.md",
+                        "last_modified": "2025-03-26T22:52:40Z",
+                        "file_state": "PRESENT"
+                    }
+                ]
+            }
+        }
+    }
+}
