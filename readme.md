@@ -38,6 +38,13 @@ Fill out your project details in the various folders.  Drop the .cursorrules/.cl
 
 # CLI Installation
 
+Show hidden files on OS X
+
+```
+defaults write com.apple.finder AppleShowAllFiles -bool true
+killall Finder
+``
+
 ```
 git clone git@github.com:andrewhopper/dotai.git
 cd dotai
