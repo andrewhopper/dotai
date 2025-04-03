@@ -18,6 +18,24 @@ async function copyTemplateFiles(config) {
   // Recursively copy template files
   await copyTemplatesRecursively(templatesDir, targetDir, config);
 
+  // Copy IDE rule files to project root if requested
+  if (config.ruleLocations?.includes('Project Root (./.cursorrules, etc.)') ||
+      config.ruleLocations?.includes('Both Locations')) {
+    const aiConfigDir = path.join(templatesDir, '0-ai-config');
+    const ruleFiles = ['.clinerules', '.cursorrules', '.roomodes', 'cline_modes.json'];
+    
+    for (const file of ruleFiles) {
+      const sourcePath = path.join(aiConfigDir, file);
+      const targetPath = path.join(process.cwd(), file);
+      
+      if (await fs.pathExists(sourcePath)) {
+        let content = await fs.readFile(sourcePath, 'utf8');
+        content = processTemplateContent(content, config);
+        await fs.writeFile(targetPath, content);
+      }
+    }
+  }
+
   return true;
 }
 
@@ -53,7 +71,7 @@ async function copyTemplatesRecursively(sourceDir, targetDir, config) {
 function processTemplateContent(content, config) {
   // Replace template variables with config values
   return content
-    .replace(/\{\{projectName\}\}/g, config.projectName)
+    .replace(/\{\{projectName\}\}/g, config.projectName || path.basename(process.cwd()))
     .replace(/\{\{currentYear\}\}/g, new Date().getFullYear().toString())
     .replace(/\{\{createdDate\}\}/g, new Date().toISOString().split('T')[0]);
 }
