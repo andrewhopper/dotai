@@ -36,6 +36,29 @@ This workflow ensures that all features are properly documented, implemented acc
 
 Fill out your project details in the various folders.  Drop the .cursorrules/.clinerules prompts into your system project, root dir, or settings.  Then Cursor/Cline will refer to these requirements and automatically document your project.
 
+# CLI Installation
+
+Show hidden files on OS X
+
+```
+defaults write com.apple.finder AppleShowAllFiles -bool true
+killall Finder
+```
+
+```
+git clone git@github.com:andrewhopper/dotai.git
+cd dotai
+npm install # install the packages
+npm install -g . # install the CLI globally
+```
+
+# CLI Usage
+```
+switch to your project dir
+e.g. cd ~/dev/proj1
+dotai init # this will allow you interactively configure your project
+```
+
 ## Directory Structure
 
 The `.ai` directory serves as a standardized location for AI-related context, documentation, and resources. This structure helps maintain consistent organization across projects and enables AI tools to easily locate and utilize project context.
@@ -70,6 +93,14 @@ The `.ai` directory serves as a standardized location for AI-related context, do
             └── security/           # Security compliance reports
                 └── 2025-03-13_ssl.md # SSL implementation validation
 ```
+
+## Research
+
+See the following research documents for more information:
+
+- [Coding Workflows](research/coding-workflows.md) - Research on Cursor rules and Cline best practices
+- [MCP Research](research/mcp-servers.md) - Research on Model Context Protocol implementation and best practices
+
 
 ## License
 
