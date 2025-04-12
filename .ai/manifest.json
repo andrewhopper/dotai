@@ -1,0 +1,6 @@
+//@todo - a manifest file for the AI
+{
+    "name": "AI",
+    "version": "1.0.0",
+    "description": "AI"
+}
