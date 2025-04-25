@@ -94,6 +94,28 @@ The `.ai` directory serves as a standardized location for AI-related context, do
                 └── 2025-03-13_ssl.md # SSL implementation validation
 ```
 
+## Documentation
+
+### User Guide
+- [Template Documentation](docs/user-guide/template-documentation.md)
+- [Workflow Guide](docs/user-guide/workflow-guide.md)
+
+### Overview
+- [Architecture](docs/overview/architecture.md)
+- [Roadmap](docs/overview/roadmap.md)
+- [Architecture and Roadmap](docs/overview/architecture-and-roadmap.md)
+
+### Specifications
+- [Directory Structure](docs/specifications/directory-structure.md)
+- CLI Commands
+  - [Index](docs/specifications/cli-commands/index.md)
+  - [Init Command](docs/specifications/cli-commands/init.md)
+  - [Validate Command](docs/specifications/cli-commands/validate.md)
+
+### Implementation
+- CLI Tools
+  - [Implementation Details](docs/implementation/cli-tools/implementation.md)
+
 ## Research
 
 See the following research documents for more information:
