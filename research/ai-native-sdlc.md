@@ -12,6 +12,731 @@ Work Planning → Parallelization Analysis → Parallel Implementation →
 Test Environments → Validation → Deployment
 ```
 
+## Architectural Consistency & Lock Management
+
+### The Problem
+When multiple AI agents work in parallel on a codebase, they can:
+- Implement conflicting architectural patterns (e.g., two different middleware approaches)
+- Modify the same files simultaneously causing merge conflicts
+- Make inconsistent technology choices (e.g., different state management libraries)
+- Violate established architectural decisions
+- Create technical debt through divergent implementations
+
+### Solution: Architecture Decision Records (ADRs) + Lock Management
+
+#### Architecture Decision Records (ADRs)
+
+ADRs are lightweight documents that capture important architectural decisions made during the project lifecycle. They ensure all AI agents and developers understand WHY certain approaches were chosen and MUST follow them.
+
+**ADR Structure:**
+```markdown
+# ADR-XXX: [Title]
+
+## Status
+[Proposed | Accepted | Deprecated | Superseded]
+
+## Context
+What is the issue we're facing? What factors are driving this decision?
+
+## Decision
+What is the architectural decision we're making?
+
+## Consequences
+What are the trade-offs? What becomes easier/harder?
+
+## Alternatives Considered
+What other options were evaluated and why were they rejected?
+
+## Compliance
+How will agents/developers verify compliance with this decision?
+```
+
+**Example ADR:**
+```markdown
+# ADR-001: HTTP Middleware Pattern
+
+## Status
+Accepted
+
+## Context
+We need a consistent way to handle cross-cutting concerns (auth, logging,
+error handling) across all API endpoints. Multiple middleware approaches
+exist (decorators, higher-order functions, class-based middleware).
+
+## Decision
+We will use Express.js-style middleware functions with the signature:
+`(req, res, next) => void`
+
+All middleware will be composed using a centralized middleware chain in
+`src/middleware/index.ts`. No ad-hoc middleware in route handlers.
+
+## Consequences
+- Easier: Consistent patterns, testability, reusability
+- Harder: More boilerplate for simple one-off checks
+
+## Alternatives Considered
+- Decorators: TypeScript experimental, harder to compose
+- Class-based: More verbose, steeper learning curve
+
+## Compliance
+- Linting rule: No inline middleware in route definitions
+- Code review: All new middleware must be registered in middleware/index.ts
+- AI Agent Check: Search for `app.get|post|put|delete` with inline functions
+```
+
+**ADR Categories:**
+- **Architectural Patterns**: MVC, microservices, event-driven, etc.
+- **Technology Choices**: Database, framework, libraries
+- **Code Organization**: File structure, module boundaries
+- **API Design**: REST conventions, versioning, authentication
+- **Data Management**: ORM patterns, caching strategies
+- **Testing Strategy**: Unit/integration/e2e approaches
+- **Security**: Authentication, authorization, encryption
+- **Performance**: Optimization strategies, scalability patterns
+
+**ADR Lifecycle:**
+1. **Proposed**: Draft ADR for discussion
+2. **Accepted**: Team/architect approves, becomes law
+3. **Deprecated**: Still in code but don't use for new work
+4. **Superseded**: Replaced by newer ADR (reference link)
+
+#### File and Module Locks
+
+Locks prevent concurrent modification conflicts and enforce architectural boundaries during parallel implementation.
+
+**Lock Types:**
+
+1. **Exclusive Locks** (Write Lock)
+   - Only ONE agent can modify this file/module
+   - Example: `src/middleware/auth.ts` - locked to Backend Agent
+   - Use for: Core infrastructure, shared utilities, critical paths
+
+2. **Read-Only Locks** (Reference Only)
+   - Agents can read but not modify
+   - Example: `src/types/api-contracts.ts` - defined by API spec
+   - Use for: Generated code, external contracts, stable interfaces
+
+3. **Interface Locks** (Contract Lock)
+   - File interface (exports) cannot change without approval
+   - Implementation can be modified
+   - Example: `src/services/user-service.ts` - interface locked, impl flexible
+   - Use for: Service boundaries, plugin interfaces, public APIs
+
+4. **Module Locks** (Directory Lock)
+   - Entire module/directory owned by one agent or team
+   - Example: `src/frontend/` - locked to Frontend Agent
+   - Use for: Clear separation of concerns, team boundaries
+
+5. **Architectural Locks** (Pattern Lock)
+   - Not file-based, but pattern-based
+   - Example: "All database access must go through repository pattern"
+   - Use for: Enforcing ADRs, preventing anti-patterns
+
+**Lock File Format (.ailock.yaml):**
+
+```yaml
+# src/middleware/.ailock.yaml
+lock_type: exclusive
+owner: backend-agent
+reason: "Centralized middleware must follow ADR-001"
+locked_files:
+  - auth.ts
+  - error-handler.ts
+  - logger.ts
+allowed_operations:
+  - read
+  - test
+locked_until: null  # or ISO date for temporary locks
+requires_approval_from:
+  - architecture-team
+  - security-team
+related_adr: ADR-001
+
+# Files agents CAN modify in this directory
+unlocked_files:
+  - rate-limiter.ts  # Can add new middleware, just can't break existing
+```
+
+**Lock Discovery Process:**
+
+When an AI agent plans to modify a file, it must:
+1. Check for `.ailock.yaml` in the file's directory
+2. Check for project-wide lock registry: `.locks/registry.yaml`
+3. Check related ADRs for architectural constraints
+4. Request lock acquisition if needed
+5. Validate compliance before committing
+
+**Lock Registry (.locks/registry.yaml):**
+
+```yaml
+# Project-wide lock registry
+locks:
+  - path: "src/middleware/**"
+    type: exclusive
+    owner: backend-agent
+    adr: ADR-001
+
+  - path: "src/types/api-contracts.ts"
+    type: read-only
+    reason: "Generated from OpenAPI spec"
+    generated_by: openapi-generator
+
+  - path: "src/frontend/components/**"
+    type: module
+    owner: frontend-agent
+    interface_lock: true  # Can't change component props without approval
+
+  - path: "src/database/repositories/**"
+    type: architectural
+    pattern: "Repository pattern per ADR-005"
+    validation: "Must extend BaseRepository"
+
+temporary_locks:
+  - path: "src/services/payment-service.ts"
+    type: exclusive
+    owner: agent-123
+    acquired_at: "2025-10-30T10:00:00Z"
+    expires_at: "2025-10-30T12:00:00Z"
+    reason: "Implementing payment refunds feature"
+```
+
+**Lock Conflict Resolution:**
+
+When an agent encounters a lock:
+
+```
+Agent: I need to modify src/middleware/auth.ts
+Lock Manager: LOCKED - Exclusive lock held by backend-agent (ADR-001)
+
+Options:
+1. Request lock transfer (requires current owner approval)
+2. Propose changes to owner agent (collaboration)
+3. Work around - modify calling code instead
+4. Escalate to human architect
+```
+
+**Lock Best Practices:**
+
+1. **Lock Granularity**: Lock smallest possible scope
+2. **Lock Duration**: Time-bound locks when possible
+3. **Lock Documentation**: Always reference WHY (ADR or reason)
+4. **Lock Visibility**: All locks in version control
+5. **Lock Auditing**: Log all lock acquisitions and releases
+6. **Deadlock Prevention**: Agents acquire locks in consistent order
+7. **Lock Testing**: Validate lock enforcement in CI/CD
+
+#### Integration with AI-Native SDLC
+
+**During Tech Spec Generation:**
+- Agent reviews existing ADRs
+- Proposes new ADRs if needed
+- Identifies files/modules that will be modified
+- Checks current lock status
+- Plans lock acquisition strategy
+
+**During Agent Review:**
+- Architecture agent validates compliance with ADRs
+- Checks if proposed changes violate any locks
+- Recommends lock strategy for parallel work
+- Flags conflicts with existing architectural decisions
+
+**During Parallelization Analysis:**
+- Analyzes lock dependencies
+- Identifies lock conflicts (two agents need same file)
+- Sequences work to minimize lock contention
+- Suggests lock-free alternatives (create new files vs. modify existing)
+
+**During Parallel Implementation:**
+- Agents acquire locks before starting work
+- Lock manager prevents conflicts
+- Agents validate ADR compliance before committing
+- Automated checks enforce architectural rules
+
+**Example Workflow:**
+
+```
+1. Issue: "Add rate limiting to API"
+
+2. Tech Spec Generation:
+   - Agent reads ADR-001 (middleware pattern)
+   - Proposes: Create new middleware/rate-limiter.ts
+   - Notes: src/middleware/ has module lock
+   - Plans: Need to modify middleware/index.ts (locked)
+
+3. Agent Review:
+   - Architecture agent: ✓ Follows ADR-001
+   - Security agent: ✓ Rate limiting approach approved
+   - Lock analysis: ⚠️  middleware/index.ts is locked
+
+4. Lock Acquisition:
+   - Request: exclusive lock on middleware/rate-limiter.ts (new file)
+   - Request: temporary write access to middleware/index.ts
+   - Approval: Backend-agent approves (owns middleware module)
+
+5. Implementation:
+   - Create middleware/rate-limiter.ts
+   - Add one line to middleware/index.ts (export)
+   - Automated validation: Checks ADR-001 compliance
+   - Tests pass, locks released
+```
+
+#### ADR and Lock Tooling
+
+**Required MCP Servers:**
+
+1. **ADR Manager MCP**
+   - Read/write ADRs
+   - Search ADRs by topic
+   - Validate compliance
+   - Track ADR lifecycle
+
+2. **Lock Manager MCP**
+   - Acquire/release locks
+   - Check lock status
+   - Resolve lock conflicts
+   - Audit lock usage
+
+3. **Compliance Validator MCP**
+   - Scan code for ADR violations
+   - Enforce architectural patterns
+   - Generate compliance reports
+   - Integration with CI/CD
+
+**Lock Enforcement in CI/CD:**
+
+```yaml
+# .github/workflows/lock-validation.yml
+name: Lock and ADR Validation
+
+on: [pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check Lock Compliance
+        run: |
+          # Verify agent had proper locks for modified files
+          python scripts/validate-locks.py
+
+      - name: Validate ADR Compliance
+        run: |
+          # Check code follows relevant ADRs
+          python scripts/validate-adrs.py
+
+      - name: Architecture Pattern Check
+        run: |
+          # Lint for architectural anti-patterns
+          npm run lint:architecture
+```
+
+## Project Maturity Context Management
+
+### The Challenge
+
+Different project maturity levels require different levels of rigor, validation, and process enforcement. An AI-native SDLC must adapt its behavior based on the project's maturity stage.
+
+### Maturity Levels
+
+#### Level 0: Early Prototype / Proof of Concept
+**Characteristics:**
+- Rapid iteration and experimentation
+- Minimal formal processes
+- Speed over rigor
+- Frequent architectural changes
+- Learning and validation phase
+
+**AI-Native SDLC Adaptations:**
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Optional, lightweight, can be retrofitted later |
+| **Locks** | Minimal - only for preventing destructive conflicts |
+| **Agent Review** | Fast validation focusing on functionality, not perfection |
+| **Human Review** | Quick check-ins, not formal approvals |
+| **Testing** | Smoke tests, critical path only (50%+ coverage acceptable) |
+| **Validation Criteria** | Basic functionality, no strict quality gates |
+| **Parallelization** | Aggressive - tolerate some merge conflicts |
+| **Documentation** | Inline comments, no formal specs required |
+| **CI/CD** | Basic - lint and build, minimal testing |
+| **Security** | Basic auth, no deep security review |
+
+**Example Configuration (.ai-maturity.yaml):**
+```yaml
+maturity_level: prototype
+project_phase: proof_of_concept
+rigor:
+  adr_enforcement: optional
+  lock_enforcement: minimal
+  test_coverage_minimum: 50
+  agent_review_depth: fast
+  human_approval_required: false
+  security_review_required: false
+  performance_testing: false
+velocity_priority: speed
+quality_priority: functionality
+```
+
+#### Level 1: MVP / Early Production
+**Characteristics:**
+- Core features stabilizing
+- Initial users/customers
+- Basic quality standards
+- Some architectural patterns emerging
+- Controlled technical debt
+
+**AI-Native SDLC Adaptations:**
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Required for core patterns, document as you go |
+| **Locks** | Moderate - protect core modules, shared utilities |
+| **Agent Review** | Standard validation, focus on consistency |
+| **Human Review** | Required for breaking changes and new patterns |
+| **Testing** | Unit + integration tests (70%+ coverage) |
+| **Validation Criteria** | Functionality + basic quality gates |
+| **Parallelization** | Balanced - some coordination overhead acceptable |
+| **Documentation** | API docs, README, basic architecture docs |
+| **CI/CD** | Full test suite, staging deployment |
+| **Security** | OWASP Top 10, basic security scanning |
+
+**Example Configuration:**
+```yaml
+maturity_level: mvp
+project_phase: early_production
+rigor:
+  adr_enforcement: required_for_core
+  lock_enforcement: moderate
+  test_coverage_minimum: 70
+  agent_review_depth: standard
+  human_approval_required: true  # for breaking changes
+  security_review_required: true  # basic
+  performance_testing: false
+velocity_priority: balanced
+quality_priority: consistency
+```
+
+#### Level 2: Production / Scaling
+**Characteristics:**
+- Stable customer base
+- Well-defined architecture
+- Established patterns and practices
+- Performance and reliability critical
+- Regular releases
+
+**AI-Native SDLC Adaptations:**
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Comprehensive, strictly enforced, versioned |
+| **Locks** | Strict - clear module ownership, change control |
+| **Agent Review** | Thorough validation across all dimensions |
+| **Human Review** | Required for all architectural changes |
+| **Testing** | Unit + integration + E2E (80%+ coverage) |
+| **Validation Criteria** | Full quality gates: functional + non-functional |
+| **Parallelization** | Coordinated - minimize conflicts, clear boundaries |
+| **Documentation** | Complete: API, architecture, runbooks, ADRs |
+| **CI/CD** | Full automation, blue-green deployments, rollback |
+| **Security** | Full security scanning, penetration testing |
+
+**Example Configuration:**
+```yaml
+maturity_level: production
+project_phase: scaling
+rigor:
+  adr_enforcement: strict
+  lock_enforcement: strict
+  test_coverage_minimum: 80
+  agent_review_depth: thorough
+  human_approval_required: true  # for all changes
+  security_review_required: true
+  performance_testing: true
+  load_testing_required: true
+velocity_priority: quality
+quality_priority: reliability
+compliance:
+  - SOC2
+  - GDPR
+```
+
+#### Level 3: Mission Critical / Enterprise
+**Characteristics:**
+- Business-critical systems
+- Zero-tolerance for downtime
+- Regulatory compliance required
+- Audit trails mandatory
+- Formal change management
+
+**AI-Native SDLC Adaptations:**
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Comprehensive, immutable, audit trail |
+| **Locks** | Maximum - formal change control board approval |
+| **Agent Review** | Multi-stage review by specialized agents |
+| **Human Review** | Multi-stakeholder approval (dev, security, ops, compliance) |
+| **Testing** | Full suite + chaos testing + disaster recovery (90%+ coverage) |
+| **Validation Criteria** | Exhaustive quality gates, compliance validation |
+| **Parallelization** | Highly coordinated, formal integration windows |
+| **Documentation** | Complete with audit trails, compliance docs |
+| **CI/CD** | Immutable deployments, extensive rollback, canary releases |
+| **Security** | Full security review, compliance audits, pen testing |
+
+**Example Configuration:**
+```yaml
+maturity_level: mission_critical
+project_phase: enterprise
+rigor:
+  adr_enforcement: maximum
+  adr_approval_process: change_control_board
+  lock_enforcement: maximum
+  test_coverage_minimum: 90
+  agent_review_depth: exhaustive
+  human_approval_required: true  # multi-stakeholder
+  security_review_required: true
+  compliance_review_required: true
+  performance_testing: true
+  load_testing_required: true
+  chaos_testing_required: true
+  disaster_recovery_testing: true
+velocity_priority: safety
+quality_priority: compliance
+compliance:
+  - SOC2
+  - ISO27001
+  - HIPAA
+  - PCI-DSS
+audit_trail:
+  enabled: true
+  retention_days: 2555  # 7 years
+  immutable: true
+```
+
+### Context Propagation
+
+The maturity level context must be accessible to all AI agents and validation systems.
+
+**Context File (.ai-context.yaml):**
+```yaml
+# Project Context - Read by all AI agents
+project:
+  name: "Payment Processing System"
+  maturity_level: production  # prototype | mvp | production | mission_critical
+  domain: fintech
+  compliance_requirements:
+    - PCI-DSS
+    - SOC2
+
+# Automatically adjusts behavior based on maturity level
+behavior:
+  test_coverage_gate: 80  # from maturity level config
+  adr_enforcement: strict
+  lock_enforcement: strict
+  human_review_threshold: all_changes
+
+# Context for AI agents
+context:
+  tech_stack:
+    - TypeScript
+    - Node.js
+    - PostgreSQL
+    - Redis
+  architecture_style: microservices
+  deployment: kubernetes
+
+# ADR index
+adrs:
+  - id: ADR-001
+    title: "Microservices Communication Pattern"
+    status: accepted
+  - id: ADR-002
+    title: "Database per Service Pattern"
+    status: accepted
+  - id: ADR-003
+    title: "Event Sourcing for Audit Trail"
+    status: accepted
+
+# Lock ownership map
+lock_ownership:
+  payment-service: backend-agent-payments
+  auth-service: backend-agent-auth
+  frontend: frontend-agent
+```
+
+### Maturity Transition Management
+
+**Upgrading Maturity Level:**
+
+When transitioning from one maturity level to another (e.g., MVP → Production):
+
+1. **Gap Analysis**
+   - Identify missing ADRs
+   - Document undocumented patterns
+   - Assess test coverage gaps
+   - Security vulnerability audit
+
+2. **Remediation Plan**
+   - Create missing ADRs
+   - Add comprehensive tests
+   - Implement proper lock strategy
+   - Security hardening
+
+3. **Gradual Enforcement**
+   - Phase in stricter rules
+   - Allow grace period for compliance
+   - Automated migration assistance
+
+4. **Validation**
+   - Ensure all criteria met for new level
+   - Human sign-off on transition
+   - Update .ai-context.yaml
+
+**Example Transition Workflow:**
+```yaml
+# .ai-maturity-transition.yaml
+transition:
+  from: mvp
+  to: production
+  start_date: "2025-11-01"
+  target_date: "2025-12-01"
+
+checklist:
+  - task: "Document all architectural decisions as ADRs"
+    status: in_progress
+    assigned_to: architect-agent
+
+  - task: "Increase test coverage from 70% to 80%"
+    status: in_progress
+    assigned_to: testing-agent
+
+  - task: "Implement lock strategy for core modules"
+    status: pending
+    assigned_to: lock-coordinator-agent
+
+  - task: "Security audit and remediation"
+    status: pending
+    assigned_to: security-agent
+
+  - task: "Performance baseline and optimization"
+    status: pending
+    assigned_to: performance-agent
+
+grace_period:
+  duration_days: 30
+  allow_mvp_rules: true  # temporary
+  warn_on_violation: true
+  block_on_violation: false  # becomes true after grace period
+```
+
+### Dynamic Behavior Based on Maturity
+
+AI agents adjust their behavior based on maturity context:
+
+**Example: Agent Spec Generation**
+
+```python
+# Pseudo-code for agent behavior adaptation
+def generate_tech_spec(issue, context):
+    maturity = context.maturity_level
+
+    if maturity == "prototype":
+        # Fast, minimal validation
+        spec = create_basic_spec(issue)
+        # Skip ADR review for speed
+        return spec
+
+    elif maturity == "mvp":
+        # Balanced approach
+        spec = create_detailed_spec(issue)
+        adrs = find_relevant_adrs(spec)
+        validate_against_adrs(spec, adrs)
+        return spec
+
+    elif maturity in ["production", "mission_critical"]:
+        # Comprehensive approach
+        spec = create_comprehensive_spec(issue)
+        adrs = find_all_relevant_adrs(spec)
+        validate_strict_compliance(spec, adrs)
+
+        # Propose new ADRs if needed
+        if introduces_new_pattern(spec):
+            propose_adr(spec)
+
+        # Lock analysis
+        locks = analyze_lock_requirements(spec)
+        plan_lock_acquisition(locks)
+
+        if maturity == "mission_critical":
+            # Additional compliance checks
+            validate_compliance(spec, context.compliance_requirements)
+            generate_audit_trail(spec)
+
+        return spec
+```
+
+### Maturity-Aware Validation Gates
+
+Validation criteria adapt to maturity level:
+
+```yaml
+# Validation matrix by maturity level
+validation_gates:
+  prototype:
+    - basic_linting
+    - smoke_tests
+
+  mvp:
+    - linting
+    - unit_tests
+    - integration_tests
+    - basic_security_scan
+    - test_coverage_70
+
+  production:
+    - linting
+    - unit_tests
+    - integration_tests
+    - e2e_tests
+    - security_scan
+    - performance_benchmarks
+    - test_coverage_80
+    - adr_compliance
+    - lock_compliance
+
+  mission_critical:
+    - linting
+    - unit_tests
+    - integration_tests
+    - e2e_tests
+    - chaos_tests
+    - security_audit
+    - penetration_testing
+    - performance_benchmarks
+    - load_testing
+    - disaster_recovery_test
+    - test_coverage_90
+    - adr_compliance
+    - lock_compliance
+    - compliance_validation
+    - audit_trail_verification
+```
+
+### MCP Tools for Maturity Management
+
+**Maturity Context MCP Server:**
+- Read project maturity configuration
+- Provide context to all agents
+- Validate transitions between levels
+- Generate maturity reports
+
+**Compliance Validator MCP:**
+- Check compliance requirements by maturity level
+- Generate compliance reports
+- Validate audit trails
+- Integration with compliance frameworks
+
 ## 1. Issue Ingestion Phase
 
 ### Concept
@@ -71,19 +796,27 @@ AI agents (like Claude) analyze ingested issues and generate comprehensive techn
 
 ### AI Agent Capabilities
 - Parse issue requirements and acceptance criteria
-- Generate technical design documents
+- **Review existing ADRs** for applicable architectural decisions
+- Generate technical design documents aligned with ADRs
 - Identify dependencies and integration points
 - Create data models and API specifications
-- Propose architecture patterns
+- Propose architecture patterns (or reference existing ADRs)
+- **Identify files/modules requiring locks**
+- **Check lock registry** for potential conflicts
+- Propose new ADRs when novel architectural decisions are needed
 - Estimate complexity and effort
 
 ### Output Format
 Technical specs should include:
 - Requirements mapping (issue → spec sections)
+- **ADR compliance section** (which ADRs apply, are followed)
+- **Proposed new ADRs** (if introducing new patterns)
 - Architecture diagrams (mermaid or ASCII)
 - API contracts and interfaces
 - Data models and schemas
 - Implementation approach
+- **Files/modules to be modified** with lock requirements
+- **Lock acquisition plan** for parallel work
 - Testing strategy
 - Acceptance criteria mapped to test cases
 
@@ -107,20 +840,24 @@ A specialized AI agent reviews the generated tech spec for completeness, feasibi
 
 ### Review Criteria
 The agent reviewer should validate:
-1. **Completeness**: All requirements covered
-2. **Feasibility**: Technical approach is viable
-3. **Architecture**: Follows project patterns and standards
-4. **Security**: Identifies potential vulnerabilities
-5. **Performance**: Considers scalability and efficiency
-6. **Testability**: Includes adequate testing strategy
-7. **Dependencies**: Properly identifies all dependencies
-8. **Risk Assessment**: Flags high-risk areas
+1. **ADR Compliance**: Follows all applicable Architecture Decision Records
+2. **Lock Strategy**: Proper lock acquisition plan, no conflicts
+3. **Completeness**: All requirements covered
+4. **Feasibility**: Technical approach is viable
+5. **Architecture**: Follows project patterns and standards (references ADRs)
+6. **Security**: Identifies potential vulnerabilities
+7. **Performance**: Considers scalability and efficiency
+8. **Testability**: Includes adequate testing strategy
+9. **Dependencies**: Properly identifies all dependencies
+10. **Risk Assessment**: Flags high-risk areas
+11. **Architectural Consistency**: No conflicting patterns introduced
 
 ### Agent Types
-- **Architect Agent**: Reviews design patterns and architecture
-- **Security Agent**: Focuses on security implications
+- **Architect Agent**: Reviews design patterns, validates ADR compliance, checks lock strategy
+- **Security Agent**: Focuses on security implications, validates security ADRs
 - **Performance Agent**: Analyzes scalability and optimization
 - **Testing Agent**: Validates testing strategy
+- **Lock Coordinator Agent**: Analyzes lock conflicts, suggests resolution strategies
 
 ### Output Format
 - Structured review report with PASS/FAIL/CONCERN ratings
@@ -203,18 +940,31 @@ Analyze the task dependency graph to identify opportunities for parallel executi
 - Identify independent task clusters
 - Find critical path
 - Calculate slack time for non-critical tasks
+- **Analyze lock dependencies** (tasks requiring same files/modules)
+- **Detect lock conflicts** (exclusive lock contention)
+- **Calculate lock wait times** and impact on critical path
+
+#### Lock Dependency Resolution
+1. **Lock-Free Parallelization**: Prefer tasks that modify different files
+2. **Sequential Lock Ordering**: Serialize tasks with lock conflicts
+3. **Lock Refactoring**: Split tasks to reduce lock scope
+4. **Interface-First**: Define interfaces first, implement in parallel
+5. **New File Creation**: Create new files instead of modifying locked ones
 
 #### Parallelization Strategies
-1. **Frontend/Backend Split**: UI and API work in parallel
+1. **Frontend/Backend Split**: UI and API work in parallel (different module locks)
 2. **Feature Isolation**: Independent features on separate branches
 3. **Test Infrastructure**: Test setup parallel to implementation
 4. **Database Work**: Schema migrations separate from logic
 5. **Documentation**: Parallel to implementation
+6. **Lock-Aware Clustering**: Group tasks by lock ownership
 
 #### Resource Allocation
 - Assign tasks to different AI agents
 - Allocate test environments
 - Manage branch strategies
+- **Assign lock ownership** per agent/module
+- **Plan lock acquisition order** to prevent deadlocks
 - Prevent resource conflicts
 
 ### MCP Tools & Integrations
@@ -226,9 +976,12 @@ Analyze the task dependency graph to identify opportunities for parallel executi
 ### Output
 - Parallelization plan with task clusters
 - Agent assignments
+- **Lock ownership assignments** (which agent owns which modules)
+- **Lock acquisition schedule** (order of lock requests)
+- **Lock conflict resolution plan** (how to handle contention)
 - Branch strategy
 - Environment allocation
-- Timeline with parallel tracks
+- Timeline with parallel tracks (including lock wait times)
 
 ## 7. Parallel Implementation Phase
 
@@ -273,6 +1026,9 @@ Launch multiple AI agents simultaneously to work on independent tasks, each with
 - Communication protocols
 - Merge order planning
 - Integration checkpoints
+- **Lock enforcement before code modification**
+- **ADR compliance validation in pre-commit hooks**
+- **Automated lock release on task completion**
 
 ## 8. Test Environments Phase
 
@@ -432,6 +1188,7 @@ Once all parallel paths pass validation, intelligently merge and deploy changes 
 
 ### Potential Custom MCP Servers Needed
 
+**Core Workflow:**
 1. **Jira MCP Server**: Issue ingestion and tracking
 2. **Task DAG MCP Server**: Dependency graph analysis
 3. **Multi-Agent Coordinator MCP**: Orchestrate parallel agents
@@ -439,6 +1196,28 @@ Once all parallel paths pass validation, intelligently merge and deploy changes 
 5. **Environment Provisioner MCP**: Test environment management
 6. **Merge Orchestrator MCP**: Intelligent merge strategies
 7. **Deployment Pipeline MCP**: CI/CD orchestration
+
+**Architectural Consistency:**
+8. **ADR Manager MCP**: Read/write/search/validate Architecture Decision Records
+   - Features: ADR CRUD operations, search by topic, compliance validation, lifecycle management
+   - Integration: Code validation, spec generation, agent review
+
+9. **Lock Manager MCP**: Acquire/release locks, check status, resolve conflicts
+   - Features: Lock acquisition/release, conflict detection, deadlock prevention, audit trail
+   - Integration: Parallelization analysis, implementation coordination
+
+10. **Compliance Validator MCP**: Scan code for ADR violations, enforce patterns
+    - Features: Pattern matching, anti-pattern detection, compliance reports, CI/CD integration
+    - Integration: Validation phase, agent review, pre-commit hooks
+
+**Context Management:**
+11. **Maturity Context MCP**: Provide project maturity level and adapt behavior
+    - Features: Read maturity config, validate transitions, generate reports, context propagation
+    - Integration: All phases - adjusts behavior based on maturity level
+
+12. **Lock Coordinator MCP**: Specialized agent for analyzing and resolving lock conflicts
+    - Features: Conflict analysis, resolution strategies, lock optimization suggestions
+    - Integration: Parallelization analysis, agent review
 
 ## Implementation Considerations
 
@@ -484,6 +1263,9 @@ Once all parallel paths pass validation, intelligently merge and deploy changes 
 - Agent crashes or timeouts
 - Validation failures
 - Merge conflicts
+- **Lock conflicts and deadlocks**
+- **ADR compliance violations**
+- **Maturity gate failures** (insufficient rigor for maturity level)
 - Environment issues
 - External API failures
 
