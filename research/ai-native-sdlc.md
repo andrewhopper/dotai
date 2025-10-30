@@ -7,10 +7,171 @@ This document explores concepts and tools for building an AI-native SDLC that le
 ## Core Workflow
 
 ```
-Jira Issues → Tech Spec Generation → Agent Review → Human Review →
+Jira Issues → Tech Spec Generation → Agent Review → Context Refresh → Human Review →
 Work Planning → Parallelization Analysis → Parallel Implementation →
 Test Environments → Validation → Deployment
 ```
+
+**11 Phases**:
+1. Issue Ingestion
+2. Tech Spec Generation
+3. Agent Review
+4. **Context & Documentation Refresh** (NEW!)
+5. Human Review
+6. Work Planning
+7. Parallelization Analysis
+8. Parallel Implementation
+9. Test Environments
+10. Validation
+11. Integration & Deployment
+
+---
+
+## Executive Summary
+
+### The Vision
+
+An **AI-Native Software Development Life Cycle (SDLC)** that enables multiple AI agents to work in parallel on complex software projects while maintaining **architectural consistency**, preventing conflicts, and adapting to project maturity—all without vendor lock-in.
+
+### The Problem This Solves
+
+Traditional AI-assisted development approaches (prompt-driven, conversational "vibe coding") break down at scale due to:
+- **Architectural Drift**: Different AI agents implement conflicting patterns (e.g., two middleware approaches)
+- **Merge Conflicts**: Parallel work on same files causes constant conflicts
+- **No Context Continuity**: Each prompt starts fresh, no memory of architectural decisions
+- **Vendor Lock-in**: Tied to a single AI tool (Claude, GPT, etc.)
+- **Quality Inconsistency**: No systematic validation as projects mature from prototype to production
+
+### The Solution: Three Core Innovations
+
+#### 1. **Architectural Consistency Enforcement**
+
+**Architecture Decision Records (ADRs)** + **Lock Management** prevent chaos:
+
+- **ADRs**: Lightweight documents capture "the one way" to do things (e.g., ADR-001: Middleware Pattern)
+- **5 Lock Types**: Exclusive, Read-Only, Interface, Module, Architectural
+- **Lock Manager**: Prevents agents from modifying conflicting files/patterns
+- **Automatic Validation**: CI/CD enforces ADR compliance before merge
+
+**Result**: Zero architectural conflicts, even with 10+ agents working in parallel.
+
+#### 2. **Maturity-Aware Behavior**
+
+Projects evolve through **4 maturity levels**, each with different rigor requirements:
+
+| Maturity Level | Test Coverage | ADRs | Validation | Focus |
+|----------------|---------------|------|------------|-------|
+| **Prototype** | 50%+ | Optional | Fast | Speed |
+| **MVP** | 70%+ | Core patterns | Standard | Consistency |
+| **Production** | 80%+ | Strict | Thorough | Reliability |
+| **Mission Critical** | 90%+ | Maximum | Exhaustive | Compliance |
+
+AI agents automatically adjust their behavior based on maturity level—strict validation for production, loose for prototypes.
+
+**Result**: Same SDLC scales from weekend hackathon to FDA-regulated medical software.
+
+#### 3. **Intelligent Parallelization**
+
+**Parallel Candidate Analyzer** scores features for parallel development (0-100):
+
+- **High Score (80+)**: Safe to develop in parallel immediately
+- **Medium Score (60-79)**: Parallel with daily integration checks
+- **Low Score (40-59)**: Sequential after blocking features complete
+- **Very Low (<40)**: High conflict risk, must serialize
+
+Scoring factors: File isolation, lock contention, historical conflicts, database schema impact, API contract changes.
+
+**Result**: Maximum parallelization without merge conflicts.
+
+### Complete Workflow (11 Phases)
+
+1. **Issue Ingestion**: Jira/Linear/GitHub → standardized format
+2. **Tech Spec Generation**: AI creates spec, checks ADRs, plans locks
+3. **Agent Review**: Specialized agents (architect, security, performance, testing) validate
+4. **Context Refresh**: Context7 MCP fetches latest docs, ADRs, code patterns
+5. **Human Review**: Approve, request changes, or reject
+6. **Work Planning**: Break into tasks, analyze dependencies
+7. **Parallelization Analysis**: Score candidates, assign agents, plan locks
+8. **Parallel Implementation**: Multi-agent execution on isolated branches
+9. **Test Environments**: Provision isolated environments per agent
+10. **Validation**: Maturity-aware quality gates + **LLM-as-Judge** visual testing
+11. **Integration & Deployment**: Intelligent merge, canary releases, automated rollback
+
+### Key Technologies
+
+**MCP Servers** (Model Context Protocol):
+- **Existing**: Memory, Filesystem, GitHub, Brave Search, Qdrant, PostgreSQL, Slack, Puppeteer, **Context7**
+- **Custom**: ADR Manager, Lock Manager, Compliance Validator, Maturity Context, Parallel Candidate Analyzer, LLM Judge, Code Generator Registry
+
+**Abstraction Layers** (prevent vendor lock-in):
+- **Code Generator Abstraction**: Use Claude Code, Cline, Q CLI, local LLMs interchangeably
+- **Issue Provider Abstraction**: Jira, Linear, GitHub Issues, Markdown—same workflow
+- **ADR Provider Abstraction**: Markdown files, centralized server, or MCP
+- **Changelog Provider Abstraction**: Markdown, server, MCP, or Git conventional commits
+
+### Unique Differentiators
+
+| Feature | AI-Native SDLC | Prompt-Driven | Vibe Coding | Spec-Driven | AWS AI-DLC |
+|---------|----------------|---------------|-------------|-------------|------------|
+| **Architectural Enforcement** | ✅ ADRs + Locks | ❌ None | ❌ None | ⚠️ Manual review | ⚠️ Partial |
+| **Parallel Agents** | ✅ Built-in | ❌ Sequential | ❌ Interactive | ❌ All human | ⚠️ CI/CD only |
+| **Maturity Adaptation** | ✅ 4 levels | ❌ None | ❌ None | ❌ Static | ⚠️ Stages only |
+| **Conflict Prevention** | ✅ Proactive locks | ❌ Reactive | ❌ Reactive | ❌ Reactive | ❌ Reactive |
+| **LLM-as-Judge Testing** | ✅ Visual UX eval | ❌ None | ❌ None | ❌ None | ❌ None |
+| **Tool Flexibility** | ✅ Multi-tool | ❌ Single tool | ❌ Single tool | ✅ Agnostic | ⚠️ AWS only |
+| **Vendor Lock-in** | ✅ Low | ❌ High | ❌ High | ✅ Low | ❌ High (AWS) |
+
+### Future Capabilities
+
+- **Parallel Ensemble Generation**: Multiple AI tools compete, best implementation selected
+- **LLM-as-Judge**: Visual testing via browser automation, qualitative UX assessment
+- **Self-Healing**: Agents auto-fix issues identified by LLM Judge
+- **Cross-Project Learning**: Share knowledge across repositories
+- **Predictive Parallelization**: ML models predict optimal task splitting
+
+### Implementation Path
+
+**Phase 1: POC** (Weeks 1-4)
+- Set up MCP servers (Memory, Filesystem, GitHub, Context7)
+- Single-path workflow (Issue → Spec → Implementation → Validation)
+- Manual reviews, baseline metrics
+
+**Phase 2: Agent Review** (Weeks 5-8)
+- Add specialized review agents
+- Implement ADR framework
+- Validation criteria framework
+
+**Phase 3: Parallelization** (Weeks 9-12)
+- Lock management system
+- Parallel candidate analyzer
+- Isolated environments
+- Test parallel on small features
+
+**Phase 4: Full Automation** (Weeks 13-16)
+- Reduce human touchpoints
+- LLM-as-Judge testing
+- Maturity-aware gates
+- Continuous improvement
+
+### Success Metrics
+
+- **Velocity**: 3-5x increase in feature throughput
+- **Quality**: 40% reduction in post-deployment defects
+- **Conflict Rate**: <2% merge conflicts (vs. 15-25% typical)
+- **Time to Market**: 50% reduction for new features
+- **Cost**: 60% reduction vs. all-human development
+
+### Bottom Line
+
+This AI-Native SDLC enables teams to achieve the **velocity of AI-assisted development** while maintaining the **architectural rigor of traditional enterprise SDLC**—something no other approach provides.
+
+**The key insight**: AI agents are powerful but chaotic. This framework provides the **architectural guardrails** (ADRs, locks, maturity gates) that allow them to work safely in parallel without degenerating into an unmaintainable mess.
+
+**When to use it**: Complex, long-lived systems where architectural consistency matters. Not for throwaway prototypes or weekend projects—use prompt-driven/vibe coding for those.
+
+**The future**: Humans define architecture and business logic. AI agents implement, test, and maintain at machine speed. This framework makes that future practical today.
+
+---
 
 ## Architectural Consistency & Lock Management
 
@@ -866,10 +1027,543 @@ The agent reviewer should validate:
 - Risk highlights
 - Approval recommendation
 
-## 4. Human Review Phase
+## 4. Context & Documentation Refresh Phase
 
 ### Concept
-Human developers and architects review both the tech spec and agent feedback before work begins.
+After ADR validation and agent review, automatically fetch and index the latest documentation, API specifications, and codebase context to ensure all agents work with current information during implementation.
+
+**The Problem**:
+- Documentation becomes outdated quickly
+- API contracts change between spec writing and implementation
+- Dependencies are updated with breaking changes
+- New ADRs may be created by parallel teams
+- Codebase evolves during review cycle
+
+**Solution**: Automated context refresh ensures agents have the most current information before implementation begins.
+
+### Context Management Systems
+
+#### Context7-Style Context Management
+
+**Context7 Concept**: A living documentation system that automatically keeps context synchronized with code changes, ensuring AI agents always have access to:
+- Latest API documentation
+- Current code patterns and conventions
+- Recent architectural decisions
+- Updated dependency documentation
+- Current test patterns and examples
+
+**Architecture**:
+
+```typescript
+interface ContextManager {
+  // Core operations
+  refreshContext(scope: ContextScope): Promise<ContextSnapshot>;
+  getLatestContext(type: ContextType): Promise<Context>;
+  subscribeToUpdates(callback: (update: ContextUpdate) => void): void;
+
+  // Documentation
+  fetchAPIDocs(services: string[]): Promise<APIDocumentation[]>;
+  fetchLibraryDocs(dependencies: string[]): Promise<LibraryDocs[]>;
+
+  // Code analysis
+  analyzeCodePatterns(paths: string[]): Promise<CodePatterns>;
+  extractExamples(feature: string): Promise<CodeExample[]>;
+
+  // ADR integration
+  getActiveADRs(): Promise<ADR[]>;
+  getRecentADRChanges(since: Date): Promise<ADR[]>;
+}
+
+interface ContextSnapshot {
+  timestamp: Date;
+  version: string;
+
+  // API context
+  apiDocumentation: APIDoc[];
+  openApiSpecs: OpenAPISpec[];
+  graphqlSchemas: GraphQLSchema[];
+
+  // Code context
+  codePatterns: CodePattern[];
+  examples: CodeExample[];
+  conventions: CodingConvention[];
+
+  // Architecture context
+  adrs: ADR[];
+  architectureDiagrams: Diagram[];
+  systemOverview: string;
+
+  // Dependency context
+  dependencies: Dependency[];
+  deprecationWarnings: Warning[];
+  securityAdvisories: Advisory[];
+
+  // Test context
+  testPatterns: TestPattern[];
+  testCoverage: CoverageReport;
+
+  // Change context
+  recentChanges: Change[];
+  breakingChanges: BreakingChange[];
+}
+```
+
+**Context Sources**:
+
+```yaml
+context_sources:
+  # API Documentation
+  api_docs:
+    - type: openapi
+      source: ./api-specs/*.yaml
+      auto_refresh: true
+
+    - type: graphql
+      source: ./schema.graphql
+      introspection_endpoint: http://localhost:4000/graphql
+
+    - type: rest
+      source: ./docs/api/*.md
+      format: markdown
+
+  # Code Documentation
+  code_docs:
+    - type: typedoc
+      source: ./src
+      output: ./docs/typedoc
+
+    - type: jsdoc
+      source: ./src/**/*.ts
+
+    - type: inline
+      patterns: ["src/**/*.ts", "src/**/*.tsx"]
+      extract_examples: true
+
+  # Dependency Documentation
+  dependencies:
+    - type: npm
+      package_json: ./package.json
+      fetch_readmes: true
+      fetch_changelogs: true
+
+    - type: external_apis
+      services:
+        - name: stripe
+          docs_url: https://stripe.com/docs/api
+        - name: aws-sdk
+          docs_url: https://docs.aws.amazon.com/
+
+  # Architecture Documentation
+  architecture:
+    - type: adr
+      directory: ./docs/architecture/decisions
+
+    - type: diagrams
+      directory: ./docs/diagrams
+      formats: [mermaid, plantuml, draw.io]
+
+    - type: system_overview
+      file: ./docs/ARCHITECTURE.md
+
+  # Test Documentation
+  tests:
+    - type: test_patterns
+      directory: ./tests
+      extract_examples: true
+
+    - type: coverage
+      report: ./coverage/coverage-summary.json
+```
+
+**Context Refresh Workflow**:
+
+```typescript
+async function refreshContextForImplementation(
+  techSpec: TechSpec,
+  agentReview: AgentReview
+): Promise<ContextSnapshot> {
+
+  const contextManager = new ContextManager();
+
+  // 1. Identify required context based on tech spec
+  const requiredContext = analyzeRequiredContext(techSpec);
+
+  // 2. Fetch latest API documentation
+  const apiDocs = await Promise.all(
+    requiredContext.apis.map(api => contextManager.fetchAPIDocs([api]))
+  );
+
+  // 3. Fetch updated dependency documentation
+  const dependencyDocs = await contextManager.fetchLibraryDocs(
+    requiredContext.dependencies
+  );
+
+  // 4. Get latest ADRs (may have changed during review)
+  const latestADRs = await contextManager.getActiveADRs();
+  const newADRs = latestADRs.filter(adr =>
+    adr.created > techSpec.created
+  );
+
+  if (newADRs.length > 0) {
+    console.warn(`⚠️  ${newADRs.length} new ADRs created since spec generation`);
+    // Re-validate spec against new ADRs
+    await validateAgainstNewADRs(techSpec, newADRs);
+  }
+
+  // 5. Extract relevant code patterns and examples
+  const codePatterns = await contextManager.analyzeCodePatterns(
+    requiredContext.relatedFiles
+  );
+
+  const examples = await contextManager.extractExamples(
+    techSpec.featureName
+  );
+
+  // 6. Check for breaking changes in dependencies
+  const breakingChanges = await detectBreakingChanges(
+    techSpec.dependencies,
+    dependencyDocs
+  );
+
+  if (breakingChanges.length > 0) {
+    console.warn(`⚠️  ${breakingChanges.length} breaking changes detected`);
+    // Update spec with migration notes
+    await updateSpecWithMigrationNotes(techSpec, breakingChanges);
+  }
+
+  // 7. Create snapshot
+  const snapshot: ContextSnapshot = {
+    timestamp: new Date(),
+    version: generateVersion(),
+    apiDocumentation: apiDocs.flat(),
+    codePatterns,
+    examples,
+    adrs: latestADRs,
+    dependencies: dependencyDocs,
+    breakingChanges,
+    recentChanges: await getRecentChanges(techSpec.created),
+    testPatterns: await extractTestPatterns(requiredContext.testFiles)
+  };
+
+  // 8. Store snapshot for agents to use
+  await storeContextSnapshot(techSpec.id, snapshot);
+
+  // 9. Generate context summary for agents
+  const summary = generateContextSummary(snapshot);
+
+  return snapshot;
+}
+```
+
+**Context Update Detection**:
+
+```typescript
+// Monitor for context changes during implementation
+class ContextMonitor {
+  private watchers: FileWatcher[] = [];
+
+  async monitorContextChanges(
+    contextSnapshot: ContextSnapshot,
+    callback: (change: ContextChange) => void
+  ) {
+
+    // Watch ADR directory
+    this.watchers.push(
+      watchDirectory('./docs/architecture/decisions', async (event) => {
+        if (event.type === 'created' || event.type === 'modified') {
+          const newADR = await parseADR(event.path);
+          callback({
+            type: 'adr_change',
+            severity: 'high',
+            message: `New ADR created: ${newADR.title}`,
+            adr: newADR
+          });
+        }
+      })
+    );
+
+    // Watch package.json for dependency changes
+    this.watchers.push(
+      watchFile('./package.json', async (event) => {
+        const changes = await detectDependencyChanges(
+          contextSnapshot.dependencies
+        );
+
+        if (changes.length > 0) {
+          callback({
+            type: 'dependency_change',
+            severity: 'medium',
+            message: `${changes.length} dependencies updated`,
+            changes
+          });
+        }
+      })
+    );
+
+    // Watch API spec changes
+    this.watchers.push(
+      watchDirectory('./api-specs', async (event) => {
+        callback({
+          type: 'api_spec_change',
+          severity: 'high',
+          message: `API spec changed: ${event.path}`,
+          spec: await parseOpenAPI(event.path)
+        });
+      })
+    );
+  }
+}
+```
+
+### MCP Tools & Integrations
+
+#### Context7 MCP Server
+
+**Context7 MCP** is the primary tool for this phase, providing:
+
+- **Living Documentation**: Automatically syncs with code changes
+- **API Documentation**: OpenAPI/Swagger specs, GraphQL introspection
+- **Dependency Docs**: npm package READMEs, changelogs, breaking change detection
+- **Code Pattern Extraction**: Similar implementations, common patterns, best practices
+- **Example Extraction**: Relevant code examples, test patterns
+- **ADR Integration**: Latest ADRs, recent changes
+- **Change Detection**: Real-time monitoring of context updates
+- **Version Snapshots**: Point-in-time context packages for agents
+
+**Configuration**:
+```yaml
+# .ai-context7.yaml
+mcp:
+  server: context7
+  transport: stdio
+
+context7:
+  auto_refresh: true
+  snapshot_on_spec_approval: true
+  monitor_during_implementation: true
+
+  sources:
+    - api_specs: ./api-specs/**/*.yaml
+    - dependencies: ./package.json
+    - adrs: ./docs/architecture/decisions
+    - code_patterns: ./src/**/*.{ts,tsx}
+    - test_patterns: ./tests/**/*.test.ts
+```
+
+### Context Refresh Process
+
+**Automated Steps**:
+
+1. **API Documentation Refresh**
+   ```typescript
+   // Fetch latest API specs
+   const apiSpecs = await fetchOpenAPISpecs();
+   const graphqlSchema = await introspectGraphQL();
+
+   // Detect breaking changes
+   const apiChanges = compareSpecs(
+     techSpec.apiSnapshot,
+     apiSpecs
+   );
+
+   if (apiChanges.breaking.length > 0) {
+     // Alert: API contract changed
+     await notifySpecAuthor(apiChanges);
+   }
+   ```
+
+2. **Dependency Documentation Refresh**
+   ```typescript
+   // Check for dependency updates
+   const currentDeps = await parseDependencies();
+   const updates = await checkForUpdates(currentDeps);
+
+   // Fetch updated documentation
+   for (const update of updates) {
+     const changelog = await fetchChangelog(update.package);
+     const readme = await fetchReadme(update.package);
+
+     if (hasBreakingChanges(changelog)) {
+       await flagForReview(techSpec, update);
+     }
+   }
+   ```
+
+3. **ADR Synchronization**
+   ```typescript
+   // Get ADRs created/updated since spec generation
+   const newADRs = await getADRsSince(techSpec.created);
+
+   if (newADRs.length > 0) {
+     // Re-validate spec against new ADRs
+     const conflicts = await validateAgainstADRs(
+       techSpec,
+       newADRs
+     );
+
+     if (conflicts.length > 0) {
+       // Spec may need updates
+       await requestSpecReview(techSpec, conflicts);
+     }
+   }
+   ```
+
+4. **Code Pattern Extraction**
+   ```typescript
+   // Find similar implementations
+   const similarFeatures = await findSimilarFeatures(
+     techSpec.featureName
+   );
+
+   // Extract patterns
+   const patterns = await extractPatterns(similarFeatures);
+
+   // Generate examples for agents
+   const examples = await generateExamples(patterns);
+   ```
+
+5. **Test Pattern Analysis**
+   ```typescript
+   // Find relevant test patterns
+   const testFiles = await findTestFiles(
+     techSpec.relatedModules
+   );
+
+   const testPatterns = await extractTestPatterns(testFiles);
+
+   // Ensure test coverage expectations are current
+   const coverageRequirements = await getCurrentCoveragePolicy();
+   ```
+
+### Context Package for Agents
+
+After refresh, create a comprehensive context package:
+
+```yaml
+# context-package-SPEC-123.yaml
+context_snapshot:
+  version: "1.2.3"
+  generated: "2025-10-30T16:00:00Z"
+  spec_id: SPEC-123
+
+api_documentation:
+  - service: user-service
+    spec: ./context/openapi/user-service.yaml
+    version: 2.1.0
+    changes_since_spec:
+      - "Added /users/bulk endpoint"
+      - "Deprecated /users/search (use /users?query= instead)"
+
+  - service: payment-service
+    spec: ./context/openapi/payment-service.yaml
+    version: 1.5.2
+    breaking_changes:
+      - "refund() now returns Promise<RefundResult> instead of boolean"
+
+dependencies:
+  - name: "@stripe/stripe-js"
+    version: "2.4.0"
+    docs: ./context/deps/stripe-js/README.md
+    changelog: ./context/deps/stripe-js/CHANGELOG.md
+    relevant_sections:
+      - "Payment Intents API"
+      - "Error Handling"
+
+  - name: "react-query"
+    version: "5.0.0"
+    docs: ./context/deps/react-query/README.md
+    migration_guide: ./context/deps/react-query/MIGRATION-v5.md
+    breaking_changes:
+      - "useQuery signature changed"
+      - "Callbacks deprecated in favor of mutation options"
+
+adrs:
+  - id: ADR-015
+    title: "React Query for Data Fetching"
+    status: accepted
+    file: ./docs/architecture/decisions/ADR-015.md
+    relevance: high
+    created_since_spec: true  # NEW!
+
+  - id: ADR-001
+    title: "Middleware Pattern"
+    status: accepted
+    file: ./docs/architecture/decisions/ADR-001.md
+    relevance: medium
+
+code_patterns:
+  - pattern: "API Error Handling"
+    examples:
+      - file: src/services/user-service.ts
+        lines: 45-67
+        description: "Standard error handling with retry logic"
+
+  - pattern: "React Query Hook Pattern"
+    examples:
+      - file: src/hooks/useUsers.ts
+        lines: 10-35
+        description: "Data fetching hook with pagination"
+
+test_patterns:
+  - pattern: "Integration Test Setup"
+    example: tests/integration/user.test.ts
+    lines: 1-25
+
+  - pattern: "Mock API Responses"
+    example: tests/mocks/api-mocks.ts
+    lines: 10-50
+
+coverage_requirements:
+  minimum: 80  # From maturity level: production
+  unit: 85
+  integration: 75
+
+recent_changes:
+  - date: "2025-10-29"
+    description: "User service upgraded to v2.1"
+    impact: "New bulk endpoints available"
+
+  - date: "2025-10-28"
+    description: "ADR-015 added: React Query standard"
+    impact: "Must use React Query for data fetching"
+```
+
+### Validation & Alerting
+
+**Validation Checks**:
+1. ✅ All API endpoints in spec still exist
+2. ✅ No breaking changes in dependencies
+3. ✅ Tech spec compliant with new ADRs
+4. ✅ Required libraries still compatible
+5. ⚠️  Documentation complete for all external services
+
+**Alert Scenarios**:
+- 🔴 **Critical**: API contract broken since spec creation
+- 🟡 **Warning**: New ADR may conflict with spec approach
+- 🟢 **Info**: New code examples available for reference
+- 🔵 **Enhancement**: Better pattern found in recent code
+
+### Output
+
+After context refresh:
+- **Context snapshot** stored and versioned
+- **Context package** created for agents
+- **Change report** highlighting what's new/different
+- **Validation report** confirming spec still valid
+- **Alert notifications** for critical changes
+
+This ensures all agents start implementation with:
+✅ Latest API documentation
+✅ Current dependency versions
+✅ All active ADRs
+✅ Recent code patterns
+✅ Up-to-date test expectations
+✅ Awareness of breaking changes
+
+## 5. Human Review Phase
+
+### Concept
+Human developers and architects review both the tech spec, agent feedback, and context refresh report before work begins.
 
 ### MCP Tools & Integrations
 
@@ -1185,6 +1879,10 @@ Once all parallel paths pass validation, intelligently merge and deploy changes 
 8. **Puppeteer Server** - Browser automation
    - GitHub: @modelcontextprotocol/server-puppeteer
    - Use: E2E testing, UI validation
+
+9. **Context7 MCP** - Living documentation and context management
+   - Use: API docs, dependency docs, code patterns, ADR sync, change detection
+   - Phase: Context & Documentation Refresh
 
 ### Potential Custom MCP Servers Needed
 
