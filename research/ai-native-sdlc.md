@@ -660,9 +660,69 @@ jobs:
 
 Different project maturity levels require different levels of rigor, validation, and process enforcement. An AI-native SDLC must adapt its behavior based on the project's maturity stage.
 
-### Maturity Levels
+### Maturity Stages: Two-Tier System
 
-#### Level 0: Early Prototype / Proof of Concept
+**Tier 1: Maturity Level** (4 major stages)
+- Prototype
+- MVP
+- Production
+- Mission Critical
+
+**Tier 2: Sub-Stage** (progressive refinement within each level)
+- **alpha**: Very early, maximum flexibility, minimal rigor
+- **beta**: Getting stable, moderate rigor, patterns emerging
+- **rc** (release candidate): Almost ready for next level, increased rigor
+
+**Combined Notation**: `{level}-{substage}`
+- Examples: `prototype-alpha`, `mvp-beta`, `production-rc`
+
+**Key Insight**: Sub-stages provide **granular control** within each maturity level. A `prototype-alpha` needs even less rigor than `prototype-rc`. This allows AI agents to operate with appropriate flexibility in early exploration phases while progressively tightening requirements as the project stabilizes.
+
+### Sub-Stage Progression
+
+```
+Prototype Journey:
+prototype-alpha → prototype-beta → prototype-rc → MVP-alpha
+
+MVP Journey:
+mvp-alpha → mvp-beta → mvp-rc → production-alpha
+
+Production Journey:
+production-alpha → production-beta → production-rc → mission-critical-alpha
+```
+
+**When to Progress Sub-Stages**:
+- **alpha → beta**: Core functionality proven, architecture starting to solidify
+- **beta → rc**: Ready for wider testing, minimal breaking changes expected
+- **rc → next-level-alpha**: Graduation criteria met, ready for increased rigor
+
+### Rigor Progression Across Sub-Stages
+
+| Stage | Test Coverage | ADRs | Locks | Review | Philosophy |
+|-------|--------------|------|-------|--------|------------|
+| **prototype-alpha** | 0% | None | None | Skip | "Does it run?" |
+| **prototype-beta** | 30% | Optional | Minimal | Fast | "Core works" |
+| **prototype-rc** | 50% | Lightweight | Moderate | Standard | "MVP ready" |
+| **mvp-alpha** | 60% | Core patterns | Moderate | Standard | "Ship it" |
+| **mvp-beta** | 70% | Required | Moderate | Thorough | "Scale it" |
+| **mvp-rc** | 75% | Strict | Strict | Thorough | "Production ready" |
+| **production-alpha** | 80% | Strict | Strict | Comprehensive | "Reliable" |
+| **production-beta** | 85% | Versioned | Change control | Multi-agent | "Scalable" |
+| **production-rc** | 90% | Immutable | Maximum | Exhaustive | "Enterprise ready" |
+| **mission-critical-alpha** | 90% | Audit trail | Maximum | Multi-stakeholder | "Zero tolerance" |
+| **mission-critical-beta** | 95% | Compliance | Maximum | + Legal review | "Compliance" |
+| **mission-critical-rc** | 95% | Immutable | Maximum | + Audit | "Mission critical" |
+
+**Key Benefits**:
+- **Granular Control**: 12 stages instead of 4 provides fine-grained progression
+- **Reduced Friction**: Prototype-alpha has essentially zero overhead - perfect for exploration
+- **Smooth Transitions**: Moving from beta → rc within same level is easier than jumping levels
+- **Business Alignment**: Sub-stages map to real project milestones (demo ready, investor pitch, soft launch)
+
+### Maturity Levels with Sub-Stages
+
+#### Level 0: Prototype / Proof of Concept
+
 **Characteristics:**
 - Rapid iteration and experimentation
 - Minimal formal processes
@@ -670,35 +730,105 @@ Different project maturity levels require different levels of rigor, validation,
 - Frequent architectural changes
 - Learning and validation phase
 
-**AI-Native SDLC Adaptations:**
+**Sub-Stage Configurations:**
+
+##### Prototype-alpha (Ultra-Fast Exploration)
+**When**: Day 1-7, proving basic concept feasibility
 
 | Aspect | Approach |
 |--------|----------|
-| **ADRs** | Optional, lightweight, can be retrofitted later |
-| **Locks** | Minimal - only for preventing destructive conflicts |
-| **Agent Review** | Fast validation focusing on functionality, not perfection |
-| **Human Review** | Quick check-ins, not formal approvals |
-| **Testing** | Smoke tests, critical path only (50%+ coverage acceptable) |
-| **Validation Criteria** | Basic functionality, no strict quality gates |
-| **Parallelization** | Aggressive - tolerate some merge conflicts |
-| **Documentation** | Inline comments, no formal specs required |
-| **CI/CD** | Basic - lint and build, minimal testing |
-| **Security** | Basic auth, no deep security review |
+| **ADRs** | None - defer all architectural decisions |
+| **Locks** | None - all files open for modification |
+| **Agent Review** | Skip - agent generates code directly |
+| **Human Review** | Optional - developer discretion |
+| **Testing** | Manual only - no automated tests required |
+| **Validation Criteria** | "Does it run?" is enough |
+| **Parallelization** | Not applicable - usually single developer |
+| **Documentation** | None required - code comments optional |
+| **CI/CD** | None - run locally |
+| **Security** | None - hardcoded credentials OK for now |
+| **Test Coverage** | 0% acceptable |
 
-**Example Configuration (.ai-maturity.yaml):**
 ```yaml
-maturity_level: prototype
-project_phase: proof_of_concept
+maturity_stage: prototype-alpha
+rigor:
+  adr_enforcement: none
+  lock_enforcement: none
+  test_coverage_minimum: 0
+  agent_review_depth: skip
+  human_approval_required: false
+  security_review_required: false
+  performance_testing: false
+  documentation_required: false
+velocity_priority: maximum_speed
+quality_priority: proof_of_concept
+philosophy: "Move fast, break things, learn quickly"
+```
+
+##### Prototype-beta (Stabilizing Core)
+**When**: Week 2-4, core functionality proven, starting to show others
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Optional - document major decisions only |
+| **Locks** | Minimal - protect main integration points |
+| **Agent Review** | Fast validation - functionality only |
+| **Human Review** | Quick check-ins before demos |
+| **Testing** | Smoke tests for critical path (30%+ coverage) |
+| **Validation Criteria** | Core features work, edge cases OK to skip |
+| **Parallelization** | Experimental - 2-3 agents on separate features |
+| **Documentation** | README with setup instructions |
+| **CI/CD** | Basic lint and build |
+| **Security** | Move secrets to env vars |
+| **Test Coverage** | 30% acceptable |
+
+```yaml
+maturity_stage: prototype-beta
 rigor:
   adr_enforcement: optional
   lock_enforcement: minimal
-  test_coverage_minimum: 50
+  test_coverage_minimum: 30
   agent_review_depth: fast
   human_approval_required: false
   security_review_required: false
   performance_testing: false
+  documentation_required: minimal
 velocity_priority: speed
 quality_priority: functionality
+philosophy: "Core features must work, polish can wait"
+```
+
+##### Prototype-rc (Ready for MVP)
+**When**: Week 5-8, demonstrable to stakeholders, considering MVP investment
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | Lightweight - document key patterns for consistency |
+| **Locks** | Moderate - protect stable core code |
+| **Agent Review** | Standard validation - check for anti-patterns |
+| **Human Review** | Required for architectural changes |
+| **Testing** | Unit + integration for core features (50%+ coverage) |
+| **Validation Criteria** | Functionality + basic quality |
+| **Parallelization** | Controlled - 3-5 agents with coordination |
+| **Documentation** | API docs, architecture overview |
+| **CI/CD** | Full test suite, staging environment |
+| **Security** | Basic security scan, OWASP awareness |
+| **Test Coverage** | 50% acceptable |
+
+```yaml
+maturity_stage: prototype-rc
+rigor:
+  adr_enforcement: lightweight
+  lock_enforcement: moderate
+  test_coverage_minimum: 50
+  agent_review_depth: standard
+  human_approval_required: true  # for architecture changes
+  security_review_required: basic
+  performance_testing: false
+  documentation_required: basic
+velocity_priority: balanced
+quality_priority: consistency
+philosophy: "Good enough to become MVP foundation"
 ```
 
 #### Level 1: MVP / Early Production
