@@ -52,7 +52,7 @@ Neither scales to **parallel multi-agent development** on **long-lived enterpris
 | # | Problem | Impact | How This Approach Solves It |
 |---|---------|--------|------------------------------|
 | **1** | **No Architectural Memory** - Each prompt/conversation starts fresh | Agent implements authentication with JWT. Next day, different agent implements it with sessions. Now you have two auth systems. | **ADRs** capture "the one way" to do things. ADR-003: "Authentication via JWT only". All agents must validate against ADRs before implementation. |
-| **2** | **Merge Conflict Hell** - No awareness of what others are working on | 5 agents modify `middleware/index.ts` simultaneously → constant merge conflicts, lost work, wasted time | **Lock Manager** prevents concurrent modification. Exclusive lock on `middleware/index.ts` → only one agent at a time. |
+| **2** | **AI Agents Break Working Code** - No protection for stable/critical code | Agent "helps" by refactoring core auth system that's been stable for 2 years. Introduces subtle bugs. Production breaks. | **Lock Manager** protects critical code from AI modification. Read-only lock on `core/auth.ts` → agents can read patterns but can't modify working code. Humans control what AI can touch. |
 | **3** | **Architectural Drift** - No enforcement of patterns | Agent A uses Redux. Agent B uses Zustand. Agent C uses Context API. Codebase becomes unmaintainable spaghetti. | **ADR-007: State Management Pattern** mandates one approach. **Compliance Validator** blocks PRs that violate it. |
 | **4** | **No Quality Progression** - Same rigor for prototype and production | Prototype needs speed (50% test coverage OK). Production needs reliability (90% coverage required). Vibe coding treats them the same. | **4 Maturity Levels** automatically adjust rigor. Prototype = fast/loose. Production = strict/thorough. Same SDLC, different rules. |
 | **5** | **Context Window Limits** - Can't fit entire codebase in prompt | Agent doesn't know similar feature already exists elsewhere → reimplements it differently → code duplication and inconsistency | **Context7 MCP** automatically extracts relevant code patterns, examples, and conventions → agents see "how we do things here" |
@@ -75,7 +75,7 @@ Neither scales to **parallel multi-agent development** on **long-lived enterpris
 | **5** | **Static Quality Bar** - Same rigor regardless of project phase | Early prototype gets same scrutiny as mission-critical system. Overkill slows innovation OR insufficient rigor causes production incidents. | **4 Maturity Levels** → Dynamic quality bar. Prototype: 50% coverage, loose ADRs. Mission Critical: 90% coverage, strict compliance, audit trails. |
 | **6** | **Manual Parallelization** - Humans coordinate parallel work | Product manager manually divides features across devs. "Bob, you do frontend. Alice, you do backend. Don't touch each other's files." Inefficient. | **Parallel Candidate Analyzer** → Algorithm scores features, detects file overlap, assigns agents optimally. Prevents conflicts automatically. |
 | **7** | **Stale Documentation** - Specs become outdated quickly | Spec written in January. By March, dependencies updated, APIs changed, new patterns adopted. Spec is stale. Implementation drifts from spec. | **Context Refresh** → Before implementation, fetch: latest API docs, new ADRs, dependency changes, code patterns. Validate spec still current. |
-| **8** | **Reactive Conflict Resolution** - Fix merge conflicts after they happen | Two devs modify same file. Git merge conflict. Stop work, coordinate, manually resolve. Wastes time. | **Proactive Lock Management** → Agents acquire locks BEFORE modifying files. Conflicts prevented, not fixed. Zero merge conflicts. |
+| **8** | **No Protection for Critical Code** - Any agent can modify anything | Junior dev or AI agent modifies payment processing logic. Breaking change goes to production. No safeguards. | **Proactive Lock Management** → Critical code gets read-only/interface locks. Agents learn from it but can't modify it. Humans explicitly allow changes to protected code. |
 | **9** | **No Tool Flexibility** - Process tied to specific tools | Company standardized on Jira + Jenkins + Manual QA. Can't easily adopt new tools as they emerge. | **Abstraction Layers** → Issue provider (Jira/Linear/GitHub), Code generator (Claude/Cline/GPT), Changelog (Markdown/Git) all pluggable. Swap tools without rewriting process. |
 | **10** | **Binary Quality Gates** - Pass/Fail only | Code review: "Approve" or "Request Changes". No nuance. Minor issues block entire PR same as critical flaws. | **LLM-as-Judge Verdicts** → PASS, PASS_WITH_RECOMMENDATIONS, FAIL. Minor UX issues = PASS_WITH_RECOMMENDATIONS → agent auto-fixes → merge. Flexible. |
 
@@ -101,9 +101,9 @@ Neither scales to **parallel multi-agent development** on **long-lived enterpris
 This approach rests on three interconnected innovations:
 
 #### **Pillar 1: Architectural Guardrails**
-- **ADRs** = "The one way to do X"
-- **Locks** = Prevent concurrent modification
-- **Result**: Zero architectural drift, even with 10+ agents in parallel
+- **ADRs** = "The one way to do X" - prevents architectural drift
+- **Locks** = Protect critical code from AI modification - prevents agents from breaking stable systems
+- **Result**: AI agents work fast on new features, but can't touch core infrastructure without human approval
 
 #### **Pillar 2: Intelligence Scaling**
 - **Parallel Candidate Analyzer** = Smart work distribution
@@ -315,7 +315,15 @@ When multiple AI agents work in parallel on a codebase, they can:
 
 #### Architecture Decision Records (ADRs)
 
-ADRs are lightweight documents that capture important architectural decisions made during the project lifecycle. They ensure all AI agents and developers understand WHY certain approaches were chosen and MUST follow them.
+**Primary Purpose**: Provide **steering input** to AI agents so they make implementation decisions that are **consistent with prior architectural choices** in the application.
+
+ADRs are lightweight documents that capture important architectural decisions and the reasoning behind them. They guide AI agents to implement features in the established way, preventing inconsistencies like:
+- Using OpenAPI in one service and Swagger 2.0 in another
+- Implementing Express middleware in one module and custom function wrappers in another
+- Using JWT auth in one feature and session-based auth in another
+- Following REST conventions in one API and GraphQL patterns in another
+
+**Key Insight**: AI agents need to make hundreds of micro-decisions during implementation. ADRs provide the "house rules" so all those decisions align with existing patterns.
 
 **ADR Structure:**
 ```markdown
@@ -391,34 +399,54 @@ All middleware will be composed using a centralized middleware chain in
 
 #### File and Module Locks
 
-Locks prevent concurrent modification conflicts and enforce architectural boundaries during parallel implementation.
+**Primary Purpose**: Protect critical/stable code from AI agent modifications to maintain codebase stability and prevent AI from breaking working systems.
+
+**Secondary Benefit**: Also prevents concurrent modification conflicts during parallel implementation.
+
+**Core Principle**: Humans control what AI agents can modify. Lock critical code so agents can learn from it but can't change it without explicit human approval.
 
 **Lock Types:**
 
-1. **Exclusive Locks** (Write Lock)
-   - Only ONE agent can modify this file/module
-   - Example: `src/middleware/auth.ts` - locked to Backend Agent
-   - Use for: Core infrastructure, shared utilities, critical paths
+1. **Read-Only Locks** (Protection Lock) - **MOST IMPORTANT**
+   - Agents can read but **cannot modify**
+   - **Example**: `src/core/payment-processor.ts` - stable payment logic that's been in production for 2 years
+   - **Use for**:
+     - Critical business logic that works and shouldn't be touched
+     - Core infrastructure (auth, payments, security)
+     - Stable APIs with external dependencies
+     - Code that's passed extensive security audits
+   - **Why**: Prevents AI from "helpfully" refactoring critical code and introducing subtle bugs
 
-2. **Read-Only Locks** (Reference Only)
-   - Agents can read but not modify
-   - Example: `src/types/api-contracts.ts` - defined by API spec
-   - Use for: Generated code, external contracts, stable interfaces
+2. **Interface Locks** (Contract Lock)
+   - File interface (exports) **cannot change** without human approval
+   - Implementation can be modified by agents
+   - **Example**: `src/services/user-service.ts` - public API locked, internals flexible
+   - **Use for**:
+     - Service boundaries that other systems depend on
+     - Plugin interfaces
+     - Public APIs with consumers
+   - **Why**: Prevents AI from making breaking changes to contracts while allowing internal improvements
 
-3. **Interface Locks** (Contract Lock)
-   - File interface (exports) cannot change without approval
-   - Implementation can be modified
-   - Example: `src/services/user-service.ts` - interface locked, impl flexible
-   - Use for: Service boundaries, plugin interfaces, public APIs
+3. **Module Locks** (Ownership Lock)
+   - Entire module/directory owned by specific agent or team
+   - **Example**: `src/core/` - human-owned, agents can't modify
+   - **Use for**:
+     - Core infrastructure modules
+     - Security-critical code
+     - Third-party integrations
+   - **Why**: Clear boundaries - AI agents work on features, humans own infrastructure
 
-4. **Module Locks** (Directory Lock)
-   - Entire module/directory owned by one agent or team
-   - Example: `src/frontend/` - locked to Frontend Agent
-   - Use for: Clear separation of concerns, team boundaries
+4. **Exclusive Locks** (Temporary Write Lock)
+   - Only ONE agent can modify during a specific task
+   - **Example**: `src/middleware/auth.ts` - locked to Backend Agent during auth feature work
+   - **Use for**: Coordinating parallel agents on shared files
+   - **Why**: Prevents merge conflicts when multiple agents need the same file
 
 5. **Architectural Locks** (Pattern Lock)
    - Not file-based, but pattern-based
-   - Example: "All database access must go through repository pattern"
+   - **Example**: "All database access must go through repository pattern"
+   - **Use for**: Enforcing ADRs, preventing anti-patterns
+   - **Why**: Ensures agents follow architectural patterns even in new code
    - Use for: Enforcing ADRs, preventing anti-patterns
 
 **Lock File Format (.ailock.yaml):**
