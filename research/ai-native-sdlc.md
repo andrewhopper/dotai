@@ -1189,6 +1189,491 @@ validation_gates:
 - Validate audit trails
 - Integration with compliance frameworks
 
+---
+
+## Document Provenance & Lineage Tracking
+
+### The Problem
+
+A critical gap in AI-assisted development workflows is the lack of **document relationship tracking** across the development lifecycle. When requirements change, teams face these challenges:
+
+#### **Problem 1: Unknown Impact Radius**
+You change a requirement in `PRD-auth-001`, but don't know:
+- Which technical specs implement this requirement
+- Which tasks were broken down from those specs
+- Which implementations completed those tasks
+- Which validation reports need to be re-run
+
+**Result**: Changed requirements cascade into broken implementations, stale documentation, and missed revalidation.
+
+#### **Problem 2: Orphaned Documents**
+Over time, documents become disconnected from their origin:
+- Implementation exists, but which requirement drove it?
+- Test report validates code, but what spec was it based on?
+- Technical debt accumulates because nobody knows why decisions were made
+
+**Result**: Knowledge loss, inability to trace decisions, difficult onboarding for new team members or AI agents.
+
+#### **Problem 3: No Change Management**
+When upstream documents change:
+- No systematic way to identify affected downstream documents
+- Manual review required to find all related specs, tasks, implementations
+- High risk of missing critical dependencies
+
+**Result**: Inconsistent documentation, implementations out of sync with requirements, compliance gaps.
+
+#### **Problem 4: Task Breakdown Lost**
+Requirements → Tech Design → **Tasks** → Implementation flow is implicit, not explicit:
+- Tasks created from specs have no formal link back to their source
+- When spec changes, impossible to know which tasks need updating
+- Task completion doesn't automatically update parent spec status
+
+**Result**: Project tracking becomes manual, progress visibility lost, unable to automate workflow orchestration.
+
+### The Solution: Provenance Metadata
+
+Embed **machine-readable provenance metadata** in document frontmatter to create a **knowledge graph** of document relationships.
+
+#### Core Concept
+
+Every document declares its relationships using structured YAML:
+
+```yaml
+---
+id: ARCH-auth-spec-001
+created: 2025-03-12
+provenance:
+  derived_from:
+    - id: PRD-user-auth-001
+      type: product-requirement
+      relationship: implements
+      sections: [STORY-001, STORY-002]
+  depends_on:
+    - id: ARCH-security-001
+      type: architecture
+      relationship: follows
+      sections: [REQ-001, REQ-003]
+  generates:
+    - id: TASK-auth-001
+      type: task-breakdown
+      relationship: decomposes-into
+    - id: TASK-auth-002
+      type: task-breakdown
+      relationship: decomposes-into
+---
+```
+
+#### Relationship Types
+
+| Relationship | Direction | Meaning | Example |
+|-------------|-----------|---------|---------|
+| `derived_from` | Upstream | This doc was created based on another | Spec derived from requirement |
+| `depends_on` | Upstream | This doc relies on information from another | Implementation depends on ADR |
+| `generates` | Downstream | This doc led to creation of another | Spec generates tasks |
+| `implements` | Upstream | This doc implements requirements from another | Implementation implements spec |
+| `validates` | Cross-reference | This doc validates another | QA report validates implementation |
+| `supersedes` | Evolution | This doc replaces a previous version | Spec v2 supersedes spec v1 |
+| `decomposes-into` | Downstream | This doc breaks down into smaller pieces | Spec decomposes into tasks |
+
+### Complete Provenance Chain Example
+
+This shows the full lifecycle from requirement → deployment with provenance tracking:
+
+```
+PRD-auth-001 (Product Requirement)
+    ↓ generates
+ARCH-auth-spec-001 (Technical Specification)
+    ↓ decomposes-into
+├─→ TASK-auth-001 (Task: Implement JWT generation)
+│   ↓ generates
+│   DEV-jwt-impl-001 (Implementation)
+│       ↓ generates
+│       QA-jwt-test-001 (Validation Report)
+│
+└─→ TASK-auth-002 (Task: Implement token refresh)
+    ↓ generates
+    DEV-refresh-impl-001 (Implementation)
+        ↓ generates
+        QA-refresh-test-001 (Validation Report)
+```
+
+**Provenance metadata for TASK-auth-001:**
+
+```yaml
+---
+id: TASK-auth-001
+created: 2025-03-13
+provenance:
+  derived_from:
+    - id: ARCH-auth-spec-001
+      type: specification
+      relationship: decomposes-from
+      sections: [SPEC-002, SPEC-003]
+      reason: "Task to implement JWT generation from spec"
+  depends_on:
+    - id: ARCH-security-001
+      type: architecture
+      relationship: follows
+      sections: [REQ-001]
+      reason: "Must follow security standards for token generation"
+  generates:
+    - id: DEV-jwt-impl-001
+      type: implementation
+      relationship: implements-task
+      reason: "Implementation of this task"
+---
+
+# Task: Implement JWT Generation
+
+## Description
+Implement JWT token generation with RS256 signing per ARCH-auth-spec-001:SPEC-002
+
+## Acceptance Criteria
+- [ ] Generate JWT with user claims
+- [ ] Sign with RS256 private key
+- [ ] 15-minute expiration
+- [ ] Include user ID and roles in payload
+
+## Dependencies
+- ARCH-security-001:REQ-001 (Key management requirements)
+
+## Implementation Notes
+See DEV-jwt-impl-001 for completed implementation
+```
+
+### Impact Analysis Workflow
+
+When a requirement changes, use provenance to identify all affected documents:
+
+#### Step 1: Identify the Changed Document
+```
+Document changed: PRD-auth-001
+Change: Added requirement for MFA support
+```
+
+#### Step 2: Query Downstream Dependencies
+```
+What does PRD-auth-001 generate?
+→ ARCH-auth-spec-001
+
+What does ARCH-auth-spec-001 generate?
+→ TASK-auth-001
+→ TASK-auth-002
+
+What do tasks generate?
+→ DEV-jwt-impl-001 (from TASK-auth-001)
+→ DEV-refresh-impl-001 (from TASK-auth-002)
+
+What do implementations generate?
+→ QA-jwt-test-001
+→ QA-refresh-test-001
+```
+
+#### Step 3: Generate Revalidation Checklist
+
+```markdown
+## Impact Analysis: PRD-auth-001 Changed
+
+### Downstream Documents Requiring Review:
+
+**Immediate Impact (Direct Dependencies):**
+- [ ] ARCH-auth-spec-001 - Update spec to include MFA requirements
+  - File: `2-technical-design/features/auth/specification.md`
+
+**Secondary Impact (Tasks):**
+- [ ] TASK-auth-001 - May need new subtask for MFA
+  - File: `3-development/tasks/auth-001.md`
+- [ ] TASK-auth-002 - Token refresh must support MFA tokens
+  - File: `3-development/tasks/auth-002.md`
+
+**Tertiary Impact (Implementations):**
+- [ ] DEV-jwt-impl-001 - Update JWT payload for MFA claims
+  - File: `3-development/implementation/jwt-impl-001.md`
+- [ ] DEV-refresh-impl-001 - Refresh logic must preserve MFA state
+  - File: `3-development/implementation/refresh-impl-001.md`
+
+**Validation Impact:**
+- [ ] QA-jwt-test-001 - Add MFA test cases
+  - File: `4-acceptance-reports/jwt-test-001.md`
+- [ ] QA-refresh-test-001 - Add MFA refresh test cases
+  - File: `4-acceptance-reports/refresh-test-001.md`
+
+**Total Documents Requiring Revalidation: 6**
+```
+
+### Integration with AI-Native SDLC Phases
+
+Provenance tracking enhances multiple phases:
+
+#### **Phase 2: Tech Spec Generation**
+- Agent queries provenance to find related specs
+- Inherits dependencies from parent requirements
+- Automatically generates downstream task placeholders
+- Links to architectural decisions (ADRs) via `depends_on`
+
+#### **Phase 4: Context & Documentation Refresh**
+- Check if upstream documents changed since spec was written
+- Alert if `derived_from` documents have newer `updated` timestamps
+- Validate all `depends_on` links still exist and are current
+- Detect breaking changes in dependencies
+
+#### **Phase 6: Work Planning**
+- Generate tasks from specs with automatic provenance links
+- Tasks inherit `depends_on` relationships from parent spec
+- Task breakdown creates `decomposes-from` relationship
+- Enables automated progress tracking up the chain
+
+#### **Phase 9: Validation**
+- QA reports automatically link to validated implementations via `validates` relationship
+- Impact analysis identifies all docs requiring revalidation
+- Compliance reports trace from requirement → spec → implementation → validation
+
+#### **Phase 10: Integration & Deployment**
+- Verify complete provenance chain before deployment
+- Check that all downstream documents have been revalidated
+- Generate deployment impact report from provenance graph
+
+### Provenance Query Operations
+
+AI agents and developers can query the provenance graph:
+
+#### **Query 1: Impact Analysis**
+*"What needs to be revalidated if I change PRD-auth-001?"*
+
+```
+Find all documents where:
+  - provenance.derived_from.id = "PRD-auth-001" (direct)
+  - provenance.depends_on.id = "PRD-auth-001" (indirect)
+
+Then recursively find all downstream from those documents.
+```
+
+#### **Query 2: Dependency Analysis**
+*"What does DEV-jwt-impl-001 depend on?"*
+
+```
+Find all documents in:
+  - provenance.derived_from (what it implements)
+  - provenance.depends_on (what it relies on)
+
+Then recursively find all upstream dependencies.
+```
+
+#### **Query 3: Orphan Detection**
+*"Which documents have no provenance?"*
+
+```
+Find all documents where:
+  - No provenance metadata exists
+  - AND document is not a root context document (CTX-*)
+```
+
+#### **Query 4: Validation Gap Analysis**
+*"Which implementations lack validation reports?"*
+
+```
+Find all DEV-* documents where:
+  - No QA-* document has provenance.validates.id = this document
+```
+
+#### **Query 5: Task Completion Tracking**
+*"Which tasks from ARCH-auth-spec-001 are complete?"*
+
+```
+Find all TASK-* where:
+  - provenance.derived_from.id = "ARCH-auth-spec-001"
+
+For each task, check if:
+  - DEV-* exists with provenance.derived_from.id = task.id
+  - QA-* exists with provenance.validates.id = implementation.id
+
+Status: Complete if both exist, In Progress if only DEV exists, Not Started if neither.
+```
+
+### Provenance Metadata Best Practices
+
+#### **1. Always Add Provenance (Except Root Docs)**
+Every document should have provenance metadata except:
+- Root context documents (`CTX-project-context-001`)
+- Initial architectural decisions with no prior art
+- External reference documents
+
+#### **2. Reference Specific Sections When Possible**
+```yaml
+# Good - Specific
+provenance:
+  derived_from:
+    - id: PRD-auth-001
+      sections: [STORY-001, STORY-002]
+
+# Less useful - Document-level only
+provenance:
+  derived_from:
+    - id: PRD-auth-001
+```
+
+#### **3. Maintain Bidirectional Links**
+When A generates B:
+- A's metadata includes `generates: [B]`
+- B's metadata includes `derived_from: [A]`
+
+This redundancy enables fast queries in both directions.
+
+#### **4. Document the "Why"**
+```yaml
+provenance:
+  depends_on:
+    - id: ARCH-security-001
+      sections: [REQ-003]
+      reason: "Must use RSA-256 key signing per security policy"
+```
+
+The `reason` field helps AI agents and developers understand non-obvious relationships.
+
+#### **5. Update Provenance When Documents Evolve**
+When superseding a document:
+```yaml
+---
+id: ARCH-auth-spec-002
+created: 2025-04-01
+provenance:
+  supersedes:
+    - id: ARCH-auth-spec-001
+      reason: "Added MFA support, deprecated basic auth"
+  derived_from:
+    - id: PRD-auth-001
+      sections: [STORY-001, STORY-002, STORY-003]  # Added STORY-003
+---
+```
+
+### MCP Tools for Provenance Management
+
+**Provenance Analyzer MCP:**
+- Parse frontmatter from all markdown documents
+- Build in-memory provenance graph
+- Execute graph queries (impact analysis, dependency tracking)
+- Detect orphaned documents
+- Validate provenance links (verify all referenced IDs exist)
+
+**Impact Analysis MCP:**
+- Given a document ID, return full downstream impact list
+- Generate revalidation checklists when documents change
+- Identify validation gaps (implementations without QA reports)
+- Track task completion status via provenance chain
+
+**Provenance Validator MCP:**
+- Validate bidirectional link consistency
+- Check for broken references (referenced docs don't exist)
+- Enforce provenance metadata requirements by document type
+- Generate compliance reports for audit trails
+
+### Integration with Existing Systems
+
+#### **Git Hooks Integration**
+```bash
+# Pre-commit hook
+# Check that new documents have provenance metadata
+./scripts/validate-provenance.sh
+
+# Pre-push hook
+# Verify all provenance links are valid
+./scripts/check-provenance-links.sh
+```
+
+#### **CI/CD Pipeline Integration**
+```yaml
+# GitHub Actions workflow
+- name: Validate Provenance
+  run: |
+    npm run provenance:validate
+    npm run provenance:check-orphans
+    npm run provenance:verify-links
+```
+
+#### **IDE Integration**
+- VS Code extension: Show provenance graph in sidebar
+- Hover over document IDs to see relationships
+- Quick navigation to upstream/downstream documents
+- Inline warnings for broken provenance links
+
+### Benefits for Multi-Agent Workflows
+
+#### **Agent Handoffs**
+When passing work between agents:
+- Agent A creates spec with provenance pointing to requirement
+- Agent B picks up task, sees full dependency chain via provenance
+- Agent C validates implementation, links QA report via provenance
+- All agents have complete context without manual briefing
+
+#### **Parallel Work Coordination**
+Provenance enables conflict detection:
+- Agent A working on TASK-auth-001
+- Agent B working on TASK-auth-002
+- Both depend on ARCH-security-001
+- System detects shared dependency, alerts if ARCH-security-001 changes
+
+#### **Automated Progress Reporting**
+Provenance chain enables automatic status rollup:
+```
+PRD-auth-001: 60% complete
+  ├─ ARCH-auth-spec-001: Complete ✅
+  │   ├─ TASK-auth-001: Complete ✅
+  │   │   └─ DEV-jwt-impl-001: Complete ✅
+  │   │       └─ QA-jwt-test-001: Complete ✅
+  │   └─ TASK-auth-002: In Progress ⏳
+  │       └─ DEV-refresh-impl-001: In Progress ⏳
+  │           └─ QA-refresh-test-001: Not Started ❌
+```
+
+### Comparison: Before vs After Provenance Tracking
+
+| Scenario | Without Provenance | With Provenance |
+|----------|-------------------|-----------------|
+| **Requirement changes** | Manual search for affected docs, likely miss some | Automated impact analysis, checklist generated in seconds |
+| **Task breakdown** | Tasks disconnected from specs, tracking manual | Tasks linked to specs, automated progress rollup |
+| **New agent onboarding** | Read everything, no clear starting point | Follow provenance chain from root docs, clear context |
+| **Validation gaps** | Manual audit to find missing test reports | Automated detection via provenance graph queries |
+| **Documentation drift** | Specs and implementations diverge over time | Provenance alerts when upstream changes |
+| **Knowledge transfer** | "Why was this built?" requires tribal knowledge | Provenance chain shows full decision history |
+| **Compliance audits** | Manual tracing from requirement to validation | Automated provenance report proves complete chain |
+
+### Future Enhancements
+
+**Provenance Visualization:**
+- Interactive graph visualization of document relationships
+- Mermaid diagram generation from provenance metadata
+- D3.js web interface for exploring knowledge graph
+
+**Provenance-Driven Automation:**
+- Auto-create downstream task placeholders when spec finalized
+- Auto-update task status when implementation validated
+- Auto-generate revalidation PRs when upstream docs change
+
+**Provenance Analytics:**
+- Identify most-depended-upon documents (high-risk change candidates)
+- Find longest provenance chains (potential refactoring targets)
+- Detect circular dependencies in provenance graph
+
+**AI Agent Provenance Awareness:**
+- Agents automatically query provenance before starting work
+- Agents validate provenance completeness before marking tasks done
+- Agents suggest missing provenance links during document creation
+
+### Summary
+
+**Provenance tracking solves the critical problem of change impact analysis in AI-native SDLC:**
+
+✅ Know exactly what to revalidate when requirements change
+✅ Maintain complete traceability from requirement → deployment
+✅ Enable automated progress tracking via document relationships
+✅ Provide AI agents with full context through knowledge graph
+✅ Detect validation gaps and orphaned documents automatically
+✅ Support compliance and audit requirements with proof of lineage
+
+**Integration point**: Provenance metadata is embedded in document frontmatter and queried by MCP servers during Phase 4 (Context Refresh), Phase 6 (Work Planning), and Phase 9 (Validation).
+
+---
+
 ## 1. Issue Ingestion Phase
 
 ### Concept
