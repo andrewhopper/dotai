@@ -1,5 +1,12 @@
 .ai/4-acceptance-reports/.DS_Store
 .DS_Store
 **/.DS_Store
-node_modules/   
+node_modules/
 test-project/*
+
+# Research: Exclude cloned repositories (keep only analysis documents)
+research/*/supabase/
+research/*/react/
+research/*/vue/
+research/*/.git/
+research/*/*/.git/
