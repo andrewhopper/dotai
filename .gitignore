@@ -5,8 +5,11 @@ node_modules/
 test-project/*
 
 # Research: Exclude cloned repositories (keep only analysis documents)
-research/*/supabase/
-research/*/react/
-research/*/vue/
-research/*/.git/
-research/*/*/.git/
+research/supabase-analysis/supabase/
+research/vite-analysis/vite/
+research/astro-analysis/astro/
+research/bun-analysis/bun/
+research/react-analysis/react/
+research/prisma-analysis/prisma/
+research/trpc-analysis/trpc/
+research/hono-analysis/hono/
