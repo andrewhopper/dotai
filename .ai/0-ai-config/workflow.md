@@ -4,6 +4,8 @@ This document outlines the standardized development workflow for projects using 
 
 ## Workflow Overview
 
+> **Important**: The depth and rigor of this workflow should match your project's stage. See [Project Stage Stability Management](../.ai/2-technical-design/architecture/project-stage-stability.md) for guidance on scaling workflow complexity appropriately. Early-stage projects (concept, prototype) should use lightweight versions of these steps, while mature projects (MVP, production) should follow the complete workflow rigorously.
+
 ```mermaid
 flowchart TD
     A[1. Bootstrap Project] --> A1[Preflight: Check Environment & Facts]
@@ -69,6 +71,43 @@ Facts have different strictness levels that determine how they should be applied
 - **REQUIRED**: Must be followed without exception
 - **RECOMMENDED**: Should be followed unless there's a compelling reason not to
 - **OPTIONAL**: Suggested practices that can be adopted as appropriate
+
+## Project Stage Considerations
+
+The Dot AI workflow should be scaled according to your project's maturity stage. Understanding and declaring your project stage helps AI assistants provide appropriately detailed guidance.
+
+### Project Stages
+
+1. **Concept** (0-20% stable): Validate core idea, explore feasibility
+2. **Prototype** (20-40% stable): Build working proof-of-concept
+3. **Alpha** (40-60% stable): Validate feature set, establish patterns
+4. **Beta** (60-80% stable): Refine quality, prepare for adoption
+5. **MVP** (80-90% stable): Launch minimum viable product
+6. **Production** (90-100% stable): Maintain production system
+
+### Stage-Appropriate Workflow
+
+| Workflow Step | Concept/Prototype | Alpha/Beta | MVP/Production |
+|---------------|------------------|------------|----------------|
+| Documentation | Minimal/Basic | Moderate/Comprehensive | Complete/Exhaustive |
+| Validation | Skip/Light | Moderate/Rigorous | Full workflow |
+| Test Coverage | None/Core paths | 50-80% | 90-95%+ |
+| Reports | Skip | Optional/Required | Required |
+
+**For detailed guidance**, including AI verbosity guidelines, transition criteria, and stage-specific templates, see [Project Stage Stability Management](../2-technical-design/architecture/project-stage-stability.md).
+
+### Declaring Project Stage
+
+Set your project stage in `.ai/1-context/project_context.md`:
+
+```markdown
+---
+stage: prototype  # concept | prototype | alpha | beta | mvp | production
+stability: 40%
+---
+```
+
+This allows AI assistants to automatically scale their verbosity and rigor appropriately.
 
 ## Workflow Steps
 
@@ -378,23 +417,40 @@ Before considering a feature complete, conduct a final review of fact compliance
 
 ## Workflow Variations
 
-### Prototype Projects
+The workflow should be adapted based on your project's maturity stage. See [Project Stage Stability Management](../2-technical-design/architecture/project-stage-stability.md) for comprehensive guidance.
 
-For prototype projects, the workflow can be simplified:
+### Early-Stage Projects (Concept/Prototype)
 
-- Focus on steps 1-4, with lightweight validation
+For concept and prototype projects (0-40% stable), simplify the workflow:
+
+- Focus on steps 1-4, with lightweight or skipped validation
 - Document key decisions but minimize formal documentation
 - Prioritize speed and experimentation
-- Use minimal preflight and post-flight hooks focused on critical checks
+- Use minimal preflight and post-flight hooks focused on critical checks only
+- **AI Verbosity**: Concise, focused on core functionality
+- Skip comprehensive error handling, extensive tests, and detailed documentation
 
-### Production Projects
+### Mid-Stage Projects (Alpha/Beta)
 
-For production projects, follow the complete workflow:
+For alpha and beta projects (40-80% stable), use moderate rigor:
+
+- Follow all workflow steps but with appropriate depth
+- Implement proper error handling and testing for main flows
+- Document public APIs and key functionality
+- Use selective preflight and post-flight hooks
+- **AI Verbosity**: Moderate detail, balanced approach
+- Growing test coverage (50-80%) and comprehensive documentation
+
+### Mature Projects (MVP/Production)
+
+For MVP and production projects (80-100% stable), follow the complete workflow:
 
 - Rigorous validation against all applicable standards
 - Comprehensive documentation at each step
 - Formal approval processes for features and validation reports
 - Full implementation of all preflight and post-flight hooks
+- **AI Verbosity**: Complete, enterprise-grade detail
+- High test coverage (90-95%+) and exhaustive documentation
 
 ## Integration with AI Tools
 

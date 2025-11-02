@@ -83,11 +83,35 @@ This references:
 - Create validation reports for all completed features
 - Check folder-locks.md before modifying directories (.ailock files)
 - Follow preflight/post-flight hook patterns in workflow.md
+- **Scale workflow rigor to match project stage** (see below)
+
+## Project Stage Management
+Projects evolve through stages of increasing stability. AI assistants should match verbosity and rigor to the current stage:
+
+### Stage Overview
+- **Concept (0-20%)**: Minimal verbosity, validate idea, brief responses
+- **Prototype (20-40%)**: Low verbosity, functional code, skip comprehensive docs/tests
+- **Alpha (40-60%)**: Moderate verbosity, proper error handling, document public APIs
+- **Beta (60-80%)**: High verbosity, comprehensive tests/docs, rigorous validation
+- **MVP (80-90%)**: Complete verbosity, production-ready, full workflow
+- **Production (90-100%)**: Enterprise-grade, all standards, complete documentation
+
+### Key Principles
+- **Early stages**: Focus on exploration, rapid iteration, minimal ceremony
+- **Late stages**: Comprehensive documentation, rigorous validation, production-ready
+- **Check project stage** in `.ai/1-context/project_context.md` before generating output
+- **Match detail level** to stage to prevent premature over-engineering
+
+**Full details**: See `.ai/2-technical-design/architecture/project-stage-stability.md`
 
 ## AI Agent Guidelines
+- **Check project stage first** in `.ai/1-context/project_context.md` to determine appropriate verbosity
+- Match detail level and rigor to project stage (see Project Stage Management above)
 - Assist with documentation using templates in workflow.md
 - Implement features according to specifications in technical-design/
-- Validate against standards in project_conventions.md
-- Generate compliance reports following validation
+- Validate against standards in project_conventions.md (rigor scaled to stage)
+- Generate compliance reports following validation (depth scaled to stage)
 - Do not modify locked folders without explicit permission
 - Always use and reference section IDs in validation reports
+- **Avoid over-engineering early-stage projects** - prioritize speed in concept/prototype phases
+- **Maintain quality in mature projects** - follow complete workflow for MVP/production
