@@ -58,6 +58,56 @@ This references:
   | PRD-login-feature-002:STORY-001 | PASS | Verified by QA |
   ```
 
+## Document Provenance (Lineage Tracking)
+
+Track relationships and dependencies between documents using provenance metadata. This enables impact analysis, traceability, and understanding of how documents evolve.
+
+### Provenance Metadata Structure
+
+Add provenance information to document frontmatter:
+
+```yaml
+---
+id: ARCH-auth-feature-001
+created: 2025-03-15
+provenance:
+  derived_from:
+    - id: PRD-user-auth-001
+      type: product-requirement
+      relationship: implements
+      sections: [STORY-001, STORY-002]
+  depends_on:
+    - id: ARCH-security-001
+      type: architecture
+      relationship: follows
+  generates:
+    - id: DEV-auth-implementation-001
+      type: implementation
+      relationship: implements-spec
+---
+```
+
+### Key Relationship Types
+
+- `derived_from`: This document was created based on another document
+- `depends_on`: This document relies on information from another document
+- `generates`: This document led to the creation of another document
+- `implements`: This document implements requirements from another
+- `validates`: This document validates another document
+- `supersedes`: This document replaces a previous document
+- `relates_to`: General relationship between documents
+
+### Provenance Best Practices
+
+1. **Always add provenance metadata** to new documents (except root context docs)
+2. **Reference specific section IDs** when possible, not just document IDs
+3. **Maintain bidirectional links**: Update both source and derived documents
+4. **Document the "why"**: Use the `reason` field for non-obvious relationships
+5. **Validate provenance chains** during compliance reviews
+6. **Track document evolution** using `supersedes` relationships
+
+For detailed guidance, see [document-provenance.md](dotai/src/templates/1-context/document-provenance.md)
+
 ## ID Usage Examples
 - `PRD-login-feature-001:STORY-002`: Product requirement for login feature, story #2
 - `DEV-authentication-001:IMPL-005`: Development implementation for authentication, implementation detail #5

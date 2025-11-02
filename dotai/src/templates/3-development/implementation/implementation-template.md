@@ -5,6 +5,27 @@ authors:
   - name: "[Author Name]"
     email: "[email@example.com]"
     role: "[Role]"
+provenance:
+  derived_from:
+    - id: ARCH-[feature-name]-001
+      type: specification
+      relationship: implements
+      sections: [SPEC-001, SPEC-002]
+      reason: "Implements the technical specification for this feature"
+  depends_on:
+    - id: CTX-project-conventions-001
+      type: convention
+      relationship: adheres-to
+      reason: "Follows project coding standards and conventions"
+    - id: ARCH-[related-architecture]-001
+      type: architecture
+      relationship: follows
+      reason: "Follows architectural decisions and patterns"
+  generates:
+    - id: QA-[feature-name]-001
+      type: validation
+      relationship: validates
+      reason: "This implementation generates the validation report"
 related:
   - ARCH-[related-architecture-doc]-001
   - PRD-[related-product-doc]-001

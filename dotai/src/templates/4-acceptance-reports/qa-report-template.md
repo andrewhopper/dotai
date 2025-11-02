@@ -5,6 +5,23 @@ authors:
   - name: "[QA Engineer Name]"
     email: "[email@example.com]"
     role: "QA Engineer"
+provenance:
+  derived_from:
+    - id: DEV-[feature-name]-001
+      type: implementation
+      relationship: validates
+      reason: "Validates the implementation against specifications"
+  validates:
+    - id: ARCH-[feature-name]-001
+      type: specification
+      relationship: confirms-compliance
+      sections: [SPEC-001, SPEC-002]
+      reason: "Confirms implementation complies with specification"
+    - id: PRD-[feature-name]-001
+      type: product-requirement
+      relationship: confirms-requirements
+      sections: [STORY-001, STORY-002]
+      reason: "Confirms all user stories and requirements are met"
 tested:
   - ARCH-[architecture-doc]-001
   - PRD-[product-doc]-001

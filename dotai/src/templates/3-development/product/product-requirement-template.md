@@ -8,6 +8,17 @@ authors:
 stakeholders:
   - name: "[Stakeholder Name]"
     department: "[Department]"
+provenance:
+  depends_on:
+    - id: CTX-target-users-001
+      type: context
+      relationship: addresses
+      reason: "Addresses user needs and personas defined in target users doc"
+  generates:
+    - id: ARCH-[feature-name]-001
+      type: specification
+      relationship: specifies
+      reason: "This requirement generates the technical specification"
 ---
 
 # [Feature Name] Requirements <!-- STORY-001 -->
