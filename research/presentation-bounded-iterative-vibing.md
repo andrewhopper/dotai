@@ -1,10 +1,10 @@
-# Bounded Iterative Vibing: A Framework for AI-Accelerated Software Development
+# Bounded Iterative Vibing: A Methodology for AI-Native Software Development
 
 **Enterprise Architecture Presentation**
 
 *Duration: 45 minutes + 15 min Q&A*
 *Target Audience: Solutions Architects, Principal SDEs, Distinguished Engineers, Engineering Directors*
-*Format: Technical deep-dive with empirical validation, enterprise integration patterns, and production deployment guidance*
+*Format: Technical deep-dive with empirical validation and implementation guidance*
 
 ---
 
@@ -12,13 +12,12 @@
 
 **VISUAL:**
 - Title: "Bounded Iterative Vibing"
-- Subtitle: "A Formal Framework for AI-Native Software Development Lifecycle"
-- Affiliation and research context
-- Conference name and date
-- Background: Clean architectural diagram showing the BIV system architecture
+- Subtitle: "A Development Methodology for AI-Native Software Engineering"
+- Research context and presentation date
+- Background: Clean conceptual diagram showing methodology principles
 
 **SPEAKER NOTES:**
-"Today I'll present Bounded Iterative Vibing, a formal framework for integrating LLM-based code generation into production software development while maintaining architectural coherence and quality assurance. This work addresses the fundamental tension between AI-accelerated development velocity and long-term system maintainability. We've validated this framework across 47 production deployments with measurable improvements in code quality metrics, development velocity, and architectural consistency."
+"Today I'll present Bounded Iterative Vibing, a development methodology for integrating LLM-based code generation into production software development while maintaining architectural coherence and quality assurance. This addresses the fundamental tension between AI-accelerated development velocity and long-term system maintainability. We've validated this methodology across 47 production implementations with measurable improvements in code quality metrics, development velocity, and architectural consistency."
 
 ---
 
@@ -38,7 +37,7 @@ Two-dimensional graph with axes:
 - **Hypothesis:** Lightweight architectural constraints can guide LLM code generation without sacrificing velocity
 
 **SPEAKER NOTES:**
-"Contemporary software development faces a fundamental tradeoff between velocity and coherence. Ad-hoc LLM code generation achieves 4-6x velocity improvements but results in architectural entropy - our analysis of 127 production codebases shows an Architectural Coherence Score decline from 0.82 to 0.34 within 90 days. Conversely, traditional specification-driven development maintains coherence at 0.85+ but constrains velocity to 2-3 features per sprint. This presentation introduces Bounded Iterative Vibing, a framework that achieves the optimal region: 6-8 features per sprint with 0.75+ coherence scores."
+"Contemporary software development faces a fundamental tradeoff between velocity and coherence. Ad-hoc LLM code generation achieves 4-6x velocity improvements but results in architectural entropy - our analysis of 127 production codebases shows an Architectural Coherence Score decline from 0.82 to 0.34 within 90 days. Conversely, traditional specification-driven development maintains coherence at 0.85+ but constrains velocity to 2-3 features per sprint. This presentation introduces Bounded Iterative Vibing, a methodology that achieves the optimal region: 6-8 features per sprint with 0.75+ coherence scores."
 
 ---
 
@@ -139,19 +138,19 @@ Side-by-side comparison chart with three columns:
 
 ---
 
-## Slide 6: Framework Introduction: Bounded Iterative Vibing
+## Slide 6: Methodology Introduction: Bounded Iterative Vibing
 
 **VISUAL:**
-System architecture diagram showing three subsystems:
-- **Architectural Constraint Layer** (top)
-- **LLM Code Generation Layer** (center)
-- **Adaptive Quality Assurance Layer** (bottom)
-- Feedback loops between all three layers
+System architecture diagram showing three core principles:
+- **Architectural Guardrails** (top)
+- **Quality Validation Processes** (center)
+- **Adaptive Rigor Framework** (bottom)
+- Feedback loops between all three components
 
 **TEXT:**
-**Bounded Iterative Vibing: A Formal Framework**
+**Bounded Iterative Vibing: A Development Methodology**
 
-**Core Principle:** Constrained optimization for LLM code generation
+**Core Principle:** Constrained optimization for LLM-assisted development
 - **Objective:** Maximize development velocity (V)
 - **Subject to:** Architectural coherence constraints (C), Quality thresholds (Q)
 - **Formulation:** max V | C ≥ C_min ∧ Q ≥ Q(maturity_stage)
@@ -159,7 +158,7 @@ System architecture diagram showing three subsystems:
 **Key Innovation:** Lightweight architectural constraints that preserve LLM generation speed while enforcing consistency
 
 **SPEAKER NOTES:**
-"Bounded Iterative Vibing formalizes AI-native development as a constrained optimization problem. The objective function maximizes development velocity subject to architectural coherence constraints and stage-dependent quality thresholds. The framework consists of three subsystems operating in a feedback loop: an Architectural Constraint Layer that encodes organizational patterns as machine-readable specifications, an LLM Code Generation Layer that operates within these bounds, and an Adaptive Quality Assurance Layer that scales rigor based on project maturity. The key innovation is that our constraints are lightweight enough to preserve LLM generation speed - median overhead is 7.3% - while enforcing the consistency necessary for long-term maintainability."
+"Bounded Iterative Vibing formalizes AI-native development as a constrained optimization problem. The objective function maximizes development velocity subject to architectural coherence constraints and stage-dependent quality thresholds. The methodology consists of three core principles operating in a feedback loop: Architectural Guardrails that encode organizational patterns as machine-readable specifications, Quality Validation Processes that verify LLM-generated code, and an Adaptive Rigor Framework that scales quality requirements based on project maturity. The key innovation is that these constraints add minimal overhead - median 7.3% - while enforcing the consistency necessary for long-term maintainability."
 
 ---
 
