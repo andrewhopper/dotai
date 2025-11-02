@@ -16,23 +16,29 @@
 - "Vibing" = Relatable, captures the AI-assisted feel
 - Strong acronym: BIV
 
-### 2. **Guardrailed Iterative Vibing (GIV)**
-*"Vibe coding with guardrails: ADRs, Locks, Gates"*
+### 2. **Vibe with Guides** ⭐ NEW IDEA
+*"Vibing freedom with architectural guides (ADRs, Locks, Gates)"*
 
 **Why it works:**
-- "Guardrailed" more explicit than "bounded"
-- Same structure as BIV
-- More visual/concrete imagery
+- Simple, memorable, approachable name
+- "Guides" = ADRs provide steering input (not rigid rules)
+- Balances freedom ("vibe") with structure ("guides")
+- Less corporate than "governed", less restrictive than "bounded"
+- Easy to explain: "Like having senior architects guide your AI agents"
+- Natural metaphor: guides help you navigate without restricting exploration
 
-### 3. **Governed Iterative Vibing (GIV)**
-*"AI governance meets iterative development"*
+### 3. **Agile Vibe Coding (AVC)** ⭐ NEW IDEA
+*"Agile methodology meets AI-accelerated vibing"*
 
 **Why it works:**
-- "Governed" sounds more enterprise-friendly
-- Appeals to compliance-minded organizations
-- Professional while keeping "vibing"
+- Connects to established agile practices (sprints, retrospectives, adaptive planning)
+- "Agile" signals iterative, adaptive approach familiar to dev teams
+- Appeals to organizations already using agile/scrum
+- Strong acronym: AVC
+- Professional yet still relatable
+- Positioning: "Agile for the AI era"
 
-### 4. **Self-Refining Vibe Coding** ⭐ NEW IDEA
+### 4. **Self-Refining Vibe Coding** ⭐
 *"Vibe coding that refines itself through maturity stages"*
 
 **Why it works:**
@@ -52,7 +58,23 @@
 6. **Lock Tightening**: Minimal locks (prototype) → Maximum locks (mission-critical) - protection refines
 7. **Code Pattern Extraction**: Learns from past implementations → refines future approaches
 
-### 5. **Architected Vibing (AV)**
+### 5. **Guardrailed Iterative Vibing (GIV)**
+*"Vibe coding with guardrails: ADRs, Locks, Gates"*
+
+**Why it works:**
+- "Guardrailed" more explicit than "bounded"
+- Same structure as BIV
+- More visual/concrete imagery
+
+### 6. **Governed Iterative Vibing (GIV)**
+*"AI governance meets iterative development"*
+
+**Why it works:**
+- "Governed" sounds more enterprise-friendly
+- Appeals to compliance-minded organizations
+- Professional while keeping "vibing"
+
+### 7. **Architected Vibing (AV)**
 *"Vibing with architectural consistency"*
 
 **Why it works:**
@@ -249,6 +271,47 @@
 
 ---
 
+### Set 9: Guidance-Focused Variants ⭐ NEW
+
+40. **Vibe with Guides** ⭐
+    - *"Vibing freedom with architectural guides (ADRs, Locks, Gates)"*
+    - **Why it works:**
+      - Simple, memorable name
+      - "Guides" = ADRs provide steering input
+      - Balances freedom ("vibe") with structure ("guides")
+      - Less corporate than "governed" or "bounded"
+      - More approachable than "guardrailed"
+    - **Positioning**: "Like having senior architects guide your AI agents"
+
+41. **Agile Vibe Coding (AVC)** ⭐
+    - *"Agile methodology meets AI-accelerated vibing"*
+    - **Why it works:**
+      - Connects to established agile practices
+      - "Agile" signals iterative, adaptive approach
+      - Appeals to teams already using agile/scrum
+      - Strong acronym: AVC
+      - Professional yet still relatable
+    - **Positioning**: "Agile for the AI era"
+
+42. **Agile AI Development (AAD)**
+    - *"Agile principles adapted for AI-driven development"*
+    - **Why it works:**
+      - Most professional/enterprise-friendly option
+      - Clear connection to agile methodology
+      - Removes "vibing" for conservative audiences
+      - Easy to explain to executives
+    - **Positioning**: "Traditional agile, AI-accelerated"
+
+43. **Guided Vibe Development (GVD)**
+    - *"AI development guided by architectural decisions"*
+    - Similar to "Vibe with Guides" but more formal
+
+44. **Agile Bounded Vibing (ABV)**
+    - *"Agile sprints + bounded AI vibing + adaptive rigor"*
+    - Combines agile + bounded concepts
+
+---
+
 ## Name Selection Criteria
 
 **Choose based on what you want to emphasize:**
@@ -265,13 +328,15 @@
 
 ---
 
-## Comparison: Top 3 Names
+## Comparison: Top 5 Names
 
 | Name | Pros | Cons | Best For |
 |------|------|------|----------|
-| **Bounded Iterative Vibing (BIV)** | • Captures all three pillars<br>• "Bounded" is key differentiator<br>• Relatable "vibing"<br>• Good acronym | • "Bounded" slightly abstract | Teams wanting balance of speed + safety |
+| **Bounded Iterative Vibing (BIV)** | • Captures all three pillars<br>• "Bounded" is key differentiator<br>• Relatable "vibing"<br>• Strong acronym: BIV | • "Bounded" slightly abstract | Teams wanting balance of speed + safety |
+| **Vibe with Guides** | • Simple, memorable<br>• Natural metaphor (guides not rules)<br>• Less corporate than alternatives<br>• Easy to explain | • No acronym<br>• "Guides" less technical | Teams emphasizing mentorship/collaboration |
+| **Agile Vibe Coding (AVC)** | • Connects to established agile practices<br>• Professional yet relatable<br>• Strong acronym: AVC<br>• "Agile" familiar to teams | • Might seem derivative of agile<br>• Less unique positioning | Agile teams transitioning to AI development |
 | **Self-Refining Vibe Coding** | • Emphasizes improvement aspect<br>• Captures maturity progression<br>• Easy to understand<br>• Unique positioning | • No good acronym<br>• Slightly longer | Teams emphasizing continuous improvement |
-| **Guardrailed Iterative Vibing (GIV)** | • Very explicit safety mechanism<br>• Visual/concrete imagery<br>• Same structure as BIV | • "Guardrailed" more words than "bounded" | Teams prioritizing safety messaging |
+| **Guardrailed Iterative Vibing (GIV)** | • Very explicit safety mechanism<br>• Visual/concrete imagery<br>• Same structure as BIV | • "Guardrailed" wordier than "bounded" | Teams prioritizing safety messaging |
 
 ---
 
@@ -282,14 +347,32 @@
 - Strong, professional acronym
 - Captures the core insight: fast vibing WITH boundaries
 
-**Alternative**: **Self-Refining Vibe Coding**
+**Runner-Up**: **Vibe with Guides**
+- Most approachable and memorable
+- Natural metaphor (guides help navigate, not restrict)
+- Perfect for teams emphasizing collaborative AI development
+- Easy elevator pitch: "Like having senior architects guide your AI agents"
+
+**For Agile Teams**: **Agile Vibe Coding (AVC)**
+- Connects directly to existing agile practices
+- Strong acronym, professional positioning
+- "Agile for the AI era" messaging resonates
+
+**For Improvement Focus**: **Self-Refining Vibe Coding**
 - Great for emphasizing the maturity progression and auto-improvement
 - More accessible language
 - Captures the "gets better over time" aspect
 
-**Hybrid Approach**: Use both
-- **Framework Name**: Bounded Iterative Vibing (BIV)
-- **Tagline**: "Self-refining vibe coding that scales from prototype to production"
+**Hybrid Approaches**:
+1. **Framework Name + Tagline**:
+   - **Bounded Iterative Vibing (BIV)** - "Self-refining vibe coding that scales from prototype to production"
+
+2. **Casual + Professional**:
+   - Marketing: **Vibe with Guides**
+   - Technical docs: **Bounded Iterative Vibing (BIV)**
+
+3. **Agile + Structure**:
+   - **Agile Vibe Coding (AVC)** - "Agile sprints with architectural guides"
 
 ---
 
@@ -313,4 +396,8 @@ Names that didn't make the cut:
 4. Write positioning statements
 5. Develop marketing materials
 
-**Current Status**: Exploring options, leaning toward **Bounded Iterative Vibing (BIV)** or **Self-Refining Vibe Coding**
+**Current Status**: Exploring options, top contenders are:
+1. **Bounded Iterative Vibing (BIV)** - Most balanced, strong acronym
+2. **Vibe with Guides** - Most approachable, natural metaphor
+3. **Agile Vibe Coding (AVC)** - Best for agile teams, professional positioning
+4. **Self-Refining Vibe Coding** - Best for emphasizing continuous improvement
