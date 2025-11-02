@@ -664,71 +664,135 @@ Different project maturity levels require different levels of rigor, validation,
 
 **Solution**: Explicit maturity stages with **stability percentages** that control AI verbosity and rigor. Early stages (20-40% stable) get concise, functional code. Mature stages (90%+ stable) get comprehensive, production-grade implementations.
 
-### Maturity Stages: Enhanced Two-Tier System with Stability Tracking
+### Maturity Stages: 13-Stage Business-Oriented System
 
-**Tier 1: Maturity Level** (5 major stages with stability %)
-- **Concept** (0-20% stable): Ideation and validation
-- **Prototype** (20-50% stable): Proof of concept and exploration
-- **MVP** (50-70% stable): Minimum viable product
-- **Production** (70-90% stable): Live system serving users
-- **Mission Critical** (90-100% stable): Enterprise and regulated systems
+The framework uses **13 business-aligned stages** with explicit stability percentages that control both quality gates and AI verbosity. Stages map to real product development milestones rather than technical abstractions.
 
-**Tier 2: Sub-Stage** (progressive refinement within each level)
-- **alpha**: Very early, maximum flexibility, minimal rigor
-- **beta**: Getting stable, moderate rigor, patterns emerging
-- **rc** (release candidate): Almost ready for next level, increased rigor
+**Complete Stage Progression:**
 
-**Combined Notation**: `{level}-{substage}` with implicit stability %
-- Examples: `concept-alpha` (5%), `prototype-beta` (40%), `mvp-rc` (65%), `production-beta` (85%)
+| Stage | Stability % | Purpose | LLM Verbosity |
+|-------|-------------|---------|---------------|
+| **Concept** | 5% | Validate business idea | 1-2 paragraphs |
+| **Feasibility** | 15% | Confirm technical approach | 3-5 paragraphs |
+| **Proof of Concept** | 20% | "Can we build this?" | 10-30 LOC |
+| **Prototype** | 30% | First working version | 100 LOC |
+| **Private Alpha** | 40% | Internal team testing | 200 LOC |
+| **Private Beta** | 50% | Select external users | 500 LOC |
+| **Public Beta** | 60% | Broader user testing | Balanced |
+| **Soft Launch** | 70% | Limited production rollout | Comprehensive |
+| **Production** | 80% | Live, stable system | Complete |
+| **Scaled** | 90% | Mature, high-volume | Thorough |
+| **Enterprise-Grade** | 95% | Large orgs, SLAs | Extensive |
+| **Mission-Critical** | 98% | Cannot fail | Enterprise-grade |
+| **Regulated** | 99% | Compliance (FDA, HIPAA) | Maximum detail |
 
 **Key Insights**:
-1. **Sub-stages provide granular control** within each maturity level. A `prototype-alpha` (25% stable) needs even less rigor than `prototype-rc` (50% stable)
-2. **Stability percentages guide AI verbosity**: 20% stable → brief code, minimal docs. 90% stable → comprehensive implementation
+1. **Business-aligned naming**: Stages match real product milestones (Beta, Launch, Production) instead of abstract technical phases
+2. **Stability percentages guide AI verbosity**: 5% stable → brief paragraphs. 30% stable → minimal code. 80% stable → comprehensive implementation. 99% stable → maximum detail
 3. **LLM behavior scales automatically**: AI agents adjust detail level, documentation depth, test coverage, and error handling based on stability percentage
+4. **Project size modulates rigor**: A tiny personal project needs less documentation/testing than a massive enterprise platform, even at the same stage
+5. **13 stages = granular control**: Smooth progression from idea validation to regulated production systems
 
-### Sub-Stage Progression
+### Stage Progression Journey
 
 ```
-Complete Journey:
-concept-alpha (5%) → concept-beta (15%) → prototype-alpha (25%) →
-prototype-beta (40%) → prototype-rc (50%) → mvp-alpha (55%) →
-mvp-beta (65%) → mvp-rc (70%) → production-alpha (75%) →
-production-beta (85%) → production-rc (90%) → mission-critical-alpha (92%) →
-mission-critical-beta (95%) → mission-critical-rc (99%)
+Complete Journey (0% → 99% stable):
+Concept (5%) → Feasibility (15%) → Proof of Concept (20%) → Prototype (30%) →
+Private Alpha (40%) → Private Beta (50%) → Public Beta (60%) → Soft Launch (70%) →
+Production (80%) → Scaled (90%) → Enterprise-Grade (95%) → Mission-Critical (98%) →
+Regulated (99%)
 ```
 
-**When to Progress Sub-Stages**:
-- **concept → prototype**: Core idea validated, technical feasibility confirmed
-- **alpha → beta**: Core functionality proven, architecture starting to solidify
-- **beta → rc**: Ready for wider testing, minimal breaking changes expected
-- **rc → next-level-alpha**: Graduation criteria met, ready for increased rigor
+**When to Progress Stages**:
+- **Concept → Feasibility**: Business idea validated, ready to assess technical approach
+- **Feasibility → Proof of Concept**: Technical approach confirmed, ready to build minimal version
+- **Proof of Concept → Prototype**: Confirmed we can build it, now build first working version
+- **Prototype → Private Alpha**: Core functionality works, ready for internal testing
+- **Private Alpha → Private Beta**: Internal feedback incorporated, ready for select external users
+- **Private Beta → Public Beta**: Limited users validated value, ready to broaden testing
+- **Public Beta → Soft Launch**: User feedback addressed, ready for limited production rollout
+- **Soft Launch → Production**: Soft launch successful, ready for full production deployment
+- **Production → Scaled**: System stable, ready to scale to high volumes
+- **Scaled → Enterprise-Grade**: High volume proven, ready for enterprise customers and SLAs
+- **Enterprise-Grade → Mission-Critical**: Enterprise deployment successful, moving to cannot-fail status
+- **Mission-Critical → Regulated**: Mission-critical operations proven, adding compliance requirements
+
+### Project Size: The Second Dimension of Rigor
+
+Project size significantly impacts appropriate rigor levels. A tiny personal side project doesn't need the same documentation, testing, and process overhead as a massive enterprise platform—even at the same maturity stage.
+
+**Project Size Categories:**
+
+| Size | Team Size | Codebase | Users | Rigor Modifier | Example |
+|------|-----------|----------|-------|----------------|---------|
+| **Tiny** | 1 person | <1K LOC | <100 | -20% rigor | Personal tool, weekend project |
+| **Small** | 1-3 people | 1-10K LOC | 100-1K | -10% rigor | Small SaaS, mobile app |
+| **Medium** | 3-10 people | 10-100K LOC | 1K-50K | Baseline | Startup product, B2B tool |
+| **Large** | 10-50 people | 100K-1M LOC | 50K-1M | +10% rigor | Enterprise SaaS, major platform |
+| **Massive** | 50+ people | >1M LOC | >1M | +20% rigor | Google/Facebook scale |
+
+**How Size Modulates Rigor:**
+
+The rigor modifier adjusts test coverage, documentation requirements, and process overhead:
+
+**Example: Production Stage (80% stable baseline)**
+
+| Size | Test Coverage | Documentation | Code Review | ADR Detail |
+|------|--------------|---------------|-------------|------------|
+| **Tiny** | 60% (-20%) | Basic README | Optional | Lightweight notes |
+| **Small** | 70% (-10%) | README + key APIs | Recommended | Core decisions only |
+| **Medium** | 80% (baseline) | Complete docs | Required | Standard ADRs |
+| **Large** | 90% (+10%) | Full + runbooks | Mandatory + multi-reviewer | Detailed ADRs |
+| **Massive** | 95%+ (+20%) | Enterprise-grade | Multiple teams + architect | Comprehensive ADRs + RFCs |
+
+**Configuration in `.ai-context.yaml`:**
+
+```yaml
+project:
+  maturity_stage: production
+  stability_percentage: 80
+  size: small  # tiny | small | medium | large | massive
+
+# Rigor automatically adjusts based on size
+rigor:
+  test_coverage_minimum: 70  # 80% baseline - 10% for "small"
+  documentation_required: standard  # not enterprise-grade
+  code_review_depth: standard  # not exhaustive
+  adr_detail_level: core_decisions  # not comprehensive
+
+llm_behavior:
+  verbosity: complete  # from maturity stage
+  adjust_for_size: true  # reduces verbosity for small projects
+  max_code_lines: 800  # smaller than baseline 1000 for "small"
+```
+
+**Key Insight**: A **Tiny Production** project (personal tool, 80% stable) gets different treatment than a **Large Production** project (enterprise SaaS, 80% stable). Same maturity, different scale, appropriate rigor.
 
 ### Rigor and Verbosity Progression Across All Stages
 
 | Stage | Stability | Test Coverage | ADRs | Locks | Review | LLM Verbosity | Philosophy |
 |-------|-----------|--------------|------|-------|--------|---------------|------------|
-| **concept-alpha** | 5% | 0% | None | None | Skip | Minimal (1-2 para) | "Is this viable?" |
-| **concept-beta** | 15% | 0% | None | None | Skip | Brief (3-5 para) | "Validate approach" |
-| **prototype-alpha** | 25% | 0% | None | None | Skip | Low (50-100 LOC) | "Does it run?" |
-| **prototype-beta** | 40% | 30% | Optional | Minimal | Fast | Moderate (200 LOC) | "Core works" |
-| **prototype-rc** | 50% | 50% | Lightweight | Moderate | Standard | Growing (500 LOC) | "MVP ready" |
-| **mvp-alpha** | 55% | 60% | Core patterns | Moderate | Standard | Balanced | "Ship it" |
-| **mvp-beta** | 65% | 70% | Required | Moderate | Thorough | Comprehensive | "Scale it" |
-| **mvp-rc** | 70% | 75% | Strict | Strict | Thorough | Detailed | "Production ready" |
-| **production-alpha** | 75% | 80% | Strict | Strict | Comprehensive | Complete | "Reliable" |
-| **production-beta** | 85% | 85% | Versioned | Change control | Multi-agent | Thorough | "Scalable" |
-| **production-rc** | 90% | 90% | Immutable | Maximum | Exhaustive | Extensive | "Enterprise ready" |
-| **mission-critical-alpha** | 92% | 90% | Audit trail | Maximum | Multi-stakeholder | Enterprise-grade | "Zero tolerance" |
-| **mission-critical-beta** | 95% | 95% | Compliance | Maximum | + Legal review | Exhaustive | "Compliance" |
-| **mission-critical-rc** | 99% | 95% | Immutable | Maximum | + Audit | Maximum detail | "Mission critical" |
+| **Concept** | 5% | 0% | None | None | Skip | 1-2 paragraphs | "Is this viable?" |
+| **Feasibility** | 15% | 0% | None | None | Skip | 3-5 paragraphs | "Can we build it?" |
+| **Proof of Concept** | 20% | 0% | None | None | Skip | 10-30 LOC | "Prove it works" |
+| **Prototype** | 30% | 10% | None | None | Fast | 100 LOC | "Does it run?" |
+| **Private Alpha** | 40% | 30% | Optional | Minimal | Fast | 200 LOC | "Internal validation" |
+| **Private Beta** | 50% | 50% | Lightweight | Moderate | Standard | 500 LOC | "Select users" |
+| **Public Beta** | 60% | 60% | Core patterns | Moderate | Standard | Balanced | "Broader testing" |
+| **Soft Launch** | 70% | 70% | Required | Strict | Thorough | Comprehensive | "Limited rollout" |
+| **Production** | 80% | 80% | Strict | Strict | Comprehensive | Complete | "Live & stable" |
+| **Scaled** | 90% | 90% | Versioned | Change control | Multi-agent | Thorough | "High volume" |
+| **Enterprise-Grade** | 95% | 95% | Immutable | Maximum | Exhaustive | Extensive | "SLAs & contracts" |
+| **Mission-Critical** | 98% | 95% | Audit trail | Maximum | Multi-stakeholder | Enterprise-grade | "Cannot fail" |
+| **Regulated** | 99% | 95% | Compliance | Maximum | + Legal/Audit | Maximum detail | "FDA/HIPAA/PCI" |
 
 **Key Benefits**:
-- **Granular Control**: 14 stages instead of 4 provides ultra-fine-grained progression
-- **Prevents Premature Verbosity**: Concept/early-prototype stages have near-zero overhead - perfect for exploration
-- **Stability Tracking**: Explicit percentages guide AI verbosity automatically
-- **Smooth Transitions**: Moving from beta → rc within same level is easier than jumping levels
-- **Business Alignment**: Sub-stages map to real project milestones (idea validation, demo ready, investor pitch, soft launch)
+- **Business-Aligned**: 13 stages map to real product milestones (Beta, Launch, Production) that stakeholders understand
+- **Prevents Premature Verbosity**: Early stages (Concept, Feasibility) have near-zero overhead - perfect for exploration
+- **Stability Tracking**: Explicit percentages guide AI verbosity automatically (5% → paragraphs, 30% → minimal code, 80% → comprehensive)
+- **Smooth Progression**: Clear criteria for moving between adjacent stages
 - **LLM Behavior Scaling**: AI agents automatically adjust code detail, docs, tests based on stability %
+- **Granular Control**: 13 stages provide fine-grained progression from idea to regulated production
 
 ### Maturity Levels with Sub-Stages
 

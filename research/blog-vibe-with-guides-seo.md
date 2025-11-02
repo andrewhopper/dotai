@@ -182,52 +182,66 @@ Here's the key insight: **not all code requires the same rigor**.
 
 A quick POC to validate product-market fit needs **0% test coverage** and **maximum speed**. A mission-critical payment system needs **95% coverage** and **exhaustive security review**.
 
-#### 14 Maturity Stages with Stability Tracking: From Concept to Mission-Critical
+#### 13 Business-Oriented Maturity Stages: From Concept to Regulated
 
-**The LLM Verbosity Problem**: AI agents generate production-grade code by default—even for early experiments. A 25% stable prototype doesn't need enterprise documentation, comprehensive error handling, or exhaustive tests, but without guidance, Claude will generate them anyway, slowing down iteration.
+**The LLM Verbosity Problem**: AI agents generate production-grade code by default—even for early experiments. A 30% stable prototype doesn't need enterprise documentation, comprehensive error handling, or exhaustive tests, but without guidance, Claude will generate them anyway, slowing down iteration.
 
-**The Solution**: Explicit stability percentages (0-100%) that automatically control AI verbosity and rigor.
+**The Solution**: Explicit stability percentages (0-100%) that automatically control AI verbosity and rigor, plus project size considerations.
 
-The framework defines **14 granular maturity stages** with stability tracking:
+The framework defines **13 business-aligned stages** that map to real product milestones:
 
-| Stage | Stability % | Test Coverage | Security Review | Documentation | ADR Enforcement | LLM Verbosity |
-|-------|-------------|--------------|-----------------|---------------|-----------------|---------------|
-| **Concept-alpha** | 5% | 0% | None | None | None | Minimal (1-2 para) |
-| **Concept-beta** | 15% | 0% | None | Brief sketch | None | Brief (3-5 para) |
-| **prototype-alpha** | 25% | 0% | None | None | None | Low (50-100 LOC) |
-| **prototype-beta** | 40% | 30% | None | Minimal | Optional | Moderate (200 LOC) |
-| **prototype-rc** | 50% | 50% | Basic | Basic | Lightweight | Growing (500 LOC) |
-| **mvp-alpha** | 55% | 60% | Basic | Standard | Core patterns | Balanced |
-| **mvp-beta** | 65% | 70% | Standard | Comprehensive | Required | Comprehensive |
-| **mvp-rc** | 70% | 75% | Standard | Complete | Strict | Detailed |
-| **production-alpha** | 75% | 80% | Required | Enterprise | Strict | Complete |
-| **production-beta** | 85% | 85% | Full | Complete + ADRs | Versioned | Thorough |
-| **production-rc** | 90% | 90% | Compliance | Audit-ready | Immutable | Extensive |
-| **mission-critical-alpha** | 92% | 90% | Full | Immutable | Audit trail | Enterprise |
-| **mission-critical-beta** | 95% | 95% | Exhaustive | Immutable + Legal | Compliance | Exhaustive |
-| **mission-critical-rc** | 99% | 95% | Exhaustive + Audit | Immutable + Audit | Maximum | Maximum detail |
+| Stage | Stability % | Test Coverage | Security | Documentation | LLM Verbosity |
+|-------|-------------|--------------|----------|---------------|---------------|
+| **Concept** | 5% | 0% | None | None | 1-2 paragraphs |
+| **Feasibility** | 15% | 0% | None | Brief sketch | 3-5 paragraphs |
+| **Proof of Concept** | 20% | 0% | None | None | 10-30 LOC |
+| **Prototype** | 30% | 10% | None | Basic | 100 LOC |
+| **Private Alpha** | 40% | 30% | None | Standard | 200 LOC |
+| **Private Beta** | 50% | 50% | Basic | Standard | 500 LOC |
+| **Public Beta** | 60% | 60% | Standard | Comprehensive | Balanced |
+| **Soft Launch** | 70% | 70% | Required | Complete | Comprehensive |
+| **Production** | 80% | 80% | Full | Enterprise | Complete |
+| **Scaled** | 90% | 90% | Compliance | Full + Runbooks | Thorough |
+| **Enterprise-Grade** | 95% | 95% | Exhaustive | Full + SLAs | Extensive |
+| **Mission-Critical** | 98% | 95% | Audit-ready | Immutable | Enterprise-grade |
+| **Regulated** | 99% | 95% | Compliance | Audit trails | Maximum detail |
+
+**Project Size Modulates Rigor**:
+
+Not all projects need the same rigor at the same stage. A tiny personal tool at "Production" needs less than a massive platform:
+
+| Size | Example | Coverage Modifier | Doc Level |
+|------|---------|-------------------|-----------|
+| **Tiny** | Personal tool | -20% | README only |
+| **Small** | Small SaaS | -10% | Basic docs |
+| **Medium** | Startup | Baseline | Complete docs |
+| **Large** | Enterprise SaaS | +10% | Full + runbooks |
+| **Massive** | Platform scale | +20% | Enterprise-grade |
 
 **Configure in `.ai-context.yaml`:**
 ```yaml
-maturity_stage: mvp-beta
-stability_percentage: 65  # Explicit stability tracking
+project:
+  maturity_stage: public_beta
+  stability_percentage: 60
+  size: small  # tiny | small | medium | large | massive
+
+# Rigor auto-adjusts based on stage + size
 rigor:
-  test_coverage_minimum: 70
+  test_coverage_minimum: 50  # 60% baseline - 10% for "small"
   security_review_required: true
-  agent_review_depth: thorough
+  agent_review_depth: standard
+
 llm_behavior:
-  verbosity: comprehensive  # Scales automatically with stability %
-  max_code_lines: 1000
+  verbosity: balanced  # Scales with stability %
+  adjust_for_size: true  # Reduces verbosity for small projects
+  max_code_lines: 600
   comments: structured
-  error_handling: comprehensive
-  documentation: full_api_docs
-velocity_priority: balanced
-quality_priority: production_ready
+  error_handling: core_flows
 ```
 
-> 🎚️ **Adaptive Quality & Verbosity**: Quality gates and AI verbosity **automatically scale** as your project matures from Concept (5% stable) → Prototype (25-50%) → MVP (55-70%) → Production (75-90%) → Mission Critical (90-99%). You get minimal overhead for early exploration and maximum rigor for production systems.
+> 🎚️ **Two-Dimensional Scaling**: Quality gates and AI verbosity scale based on **maturity stage** (Concept → Regulated) AND **project size** (Tiny → Massive). A small Prototype gets minimal code. A large Production system gets enterprise-grade implementations. Perfect fit for every project.
 
-> 💡 **The Key Insight**: A concept-alpha project (5% stable) gets 1-2 paragraph responses from Claude. A production-rc project (90% stable) gets complete enterprise-grade implementations. Same methodology, different rigor—automatically.
+> 💡 **The Key Insight**: A Concept project (5% stable) gets 1-2 paragraph responses. A tiny Production project (80% stable, personal tool) gets focused implementations. A massive Scaled project (90% stable, platform) gets comprehensive enterprise-grade code. Same methodology, automatic scaling.
 
 #### Technical Constraints: Stop Wasting Cycles
 

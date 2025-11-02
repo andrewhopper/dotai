@@ -102,12 +102,13 @@ Three columns with icons:
 - LLM-as-Judge
 
 **📊 Adaptive Rigor**
-- 14 Maturity Stages with Stability Tracking (0-100%)
+- 13 Business-Oriented Stages (Concept → Regulated)
+- Stability Tracking (0-100%)
+- Project Size Scaling (Tiny → Massive)
 - LLM Verbosity Control
-- Technical Constraints
 
 **SPEAKER NOTES:**
-"The framework rests on three pillars. First, architectural guardrails - lightweight mechanisms that guide AI without restricting speed. Second, intelligence scaling - using AI to review AI, catching 80% of issues before human review. Third, adaptive rigor - matching quality gates AND AI verbosity to your project's stability percentage. A 25% stable prototype gets minimal code from Claude. A 90% stable production system gets comprehensive implementations. Let's dive into each."
+"The framework rests on three pillars. First, architectural guardrails - lightweight mechanisms that guide AI without restricting speed. Second, intelligence scaling - using AI to review AI, catching 80% of issues before human review. Third, adaptive rigor - matching quality gates AND AI verbosity to your project using TWO dimensions: maturity stage AND project size. A 30% stable prototype gets minimal code from Claude. A tiny personal tool at 80% stable gets focused implementations. A massive platform at 90% stable gets comprehensive enterprise-grade code. Two dimensions, automatic scaling. Let's dive into each."
 
 ---
 
@@ -331,64 +332,76 @@ Sliding scale graphic with stability percentages:
 
 ---
 
-## Slide 18: 14 Maturity Stages with Stability %
+## Slide 18: 13 Business-Oriented Stages + Project Size
 
 **VISUAL:**
-Table showing progression with stability tracking:
+Split slide - left shows stages, right shows size impact:
 
-| Stage | Stability % | Tests | Security | LLM Verbosity |
-|-------|-------------|-------|----------|---------------|
-| concept-alpha | 5% | 0% | None | 1-2 paragraphs |
-| concept-beta | 15% | 0% | None | 3-5 paragraphs |
-| prototype-alpha | 25% | 0% | None | 50-100 LOC |
-| prototype-beta | 40% | 30% | Basic | 200 LOC |
-| prototype-rc | 50% | 50% | Basic | 500 LOC |
-| mvp-beta | 65% | 70% | Standard | Comprehensive |
-| mvp-rc | 70% | 75% | Standard | Detailed |
-| production-beta | 85% | 85% | Full | Thorough |
-| production-rc | 90% | 90% | Compliance | Extensive |
-| mission-critical-rc | 99% | 95% | Exhaustive | Maximum detail |
+**Left: 13 Maturity Stages**
+| Stage | Stability % | LLM Verbosity |
+|-------|-------------|---------------|
+| Concept | 5% | 1-2 paragraphs |
+| Feasibility | 15% | 3-5 paragraphs |
+| Proof of Concept | 20% | 10-30 LOC |
+| Prototype | 30% | 100 LOC |
+| Private Alpha | 40% | 200 LOC |
+| Private Beta | 50% | 500 LOC |
+| Public Beta | 60% | Balanced |
+| Soft Launch | 70% | Comprehensive |
+| Production | 80% | Complete |
+| Scaled | 90% | Thorough |
+| Enterprise-Grade | 95% | Extensive |
+| Mission-Critical | 98% | Enterprise |
+| Regulated | 99% | Maximum |
+
+**Right: Project Size Impact**
+| Size | Example | Coverage |
+|------|---------|----------|
+| Tiny | Personal tool | -20% |
+| Small | Small SaaS | -10% |
+| Medium | Startup | Baseline |
+| Large | Enterprise | +10% |
+| Massive | Platform | +20% |
 
 **TEXT:**
-**Stability % drives quality gates AND AI output size**
+**Two dimensions: Maturity Stage + Project Size**
 
 **SPEAKER NOTES:**
-"We define 14 granular maturity stages with explicit stability percentages. You start at concept-alpha at 5% stability—Claude gives you 1-2 paragraph responses to validate ideas, no code yet. Prototype-alpha at 25% gets minimal code—100 lines max, zero tests, maximum speed. As your project proves itself and reaches MVP at 65% stability, Claude generates comprehensive implementations with 70% test coverage. By production at 90%, you get extensive enterprise-grade code with full security compliance. Mission-critical at 99% gets maximum detail and 95% coverage. Quality and verbosity scale together with stability."
+"We use 13 business-aligned stages that match real product milestones—Concept, Beta, Launch, Production—names stakeholders actually understand. You start at Concept at 5% stability—Claude gives you 1-2 paragraph responses to validate ideas, no code yet. Prototype at 30% gets minimal code—100 lines max. Public Beta at 60% gets balanced implementations. Production at 80% gets complete, enterprise-ready code. But here's the key: project size modulates these requirements. A tiny personal tool at Production needs 60% coverage. A massive platform at Production needs 95%+ coverage. Two dimensions—maturity and size—automatic scaling for every project type."
 
 ---
 
-## Slide 19: Configuration Example
+## Slide 19: Configuration Example with Size
 
 **VISUAL:**
 Code snippet:
 
 ```yaml
 # .ai-context.yaml
-maturity_stage: mvp-beta
-stability_percentage: 65  # Explicit stability tracking
+project:
+  maturity_stage: public_beta
+  stability_percentage: 60
+  size: small  # tiny | small | medium | large | massive
 
+# Rigor auto-adjusts based on stage + size
 rigor:
-  test_coverage_minimum: 70
+  test_coverage_minimum: 50  # 60% baseline - 10% for "small"
   security_review_required: true
-  agent_review_depth: thorough
+  agent_review_depth: standard
 
 llm_behavior:
-  verbosity: comprehensive  # Auto-scales with stability %
-  max_code_lines: 1000
-  comments: structured
-  error_handling: comprehensive
+  verbosity: balanced
+  adjust_for_size: true  # Key: reduces verbosity for small projects
+  max_code_lines: 600
 
-velocity_priority: balanced
-quality_priority: production_ready
-
-philosophy: "Quality scales with stability"
+philosophy: "Quality scales with maturity AND size"
 ```
 
 **TEXT:**
-"One config file. Quality gates + AI verbosity auto-configured."
+"Two dimensions. One config file. Auto-configured."
 
 **SPEAKER NOTES:**
-"Configuration is simple. One YAML file defines your entire quality posture AND AI behavior. Set your maturity stage and stability percentage—all quality gates and LLM verbosity configure automatically. A 5% stable concept gets brief paragraphs. A 65% stable MVP gets balanced code with comprehensive error handling. A 90% stable production system gets enterprise implementations. Your AI agents know exactly what rigor to apply and how verbose to be. Quality and verbosity scale together with stability."
+"Configuration is simple. One YAML file defines your entire quality posture. Set your maturity stage, stability percentage, AND project size—all quality gates and LLM verbosity configure automatically. A Concept project gets brief paragraphs. A small Public Beta gets balanced code with 50% coverage. A large Production system gets enterprise implementations with 90% coverage. A tiny personal tool at Production gets focused implementations. A massive platform at Production gets comprehensive enterprise-grade code. Two dimensions—maturity and size—perfect fit for every project."
 
 ---
 
