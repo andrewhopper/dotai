@@ -102,11 +102,12 @@ Three columns with icons:
 - LLM-as-Judge
 
 **📊 Adaptive Rigor**
-- 12 Maturity Stages
+- 14 Maturity Stages with Stability Tracking (0-100%)
+- LLM Verbosity Control
 - Technical Constraints
 
 **SPEAKER NOTES:**
-"The framework rests on three pillars. First, architectural guardrails - lightweight mechanisms that guide AI without restricting speed. Second, intelligence scaling - using AI to review AI, catching 80% of issues before human review. Third, adaptive rigor - matching quality gates to your project's actual needs. Let's dive into each."
+"The framework rests on three pillars. First, architectural guardrails - lightweight mechanisms that guide AI without restricting speed. Second, intelligence scaling - using AI to review AI, catching 80% of issues before human review. Third, adaptive rigor - matching quality gates AND AI verbosity to your project's stability percentage. A 25% stable prototype gets minimal code from Claude. A 90% stable production system gets comprehensive implementations. Let's dive into each."
 
 ---
 
@@ -312,42 +313,47 @@ Two timelines side-by-side:
 
 ---
 
-## Slide 17: PILLAR 3 - Adaptive Rigor
+## Slide 17: PILLAR 3 - Adaptive Rigor with Stability Tracking
 
 **VISUAL:**
-Sliding scale graphic:
-- Left: "POC" (0% tests, maximum speed) ⚡⚡⚡
-- Middle: "MVP" (35% tests, balanced) ⚡⚡
-- Right: "Mission-Critical" (95% tests, maximum safety) 🛡️🛡️🛡️
+Sliding scale graphic with stability percentages:
+- Far Left: "Concept" (5% stable, 1-2 para) 🧪
+- Left: "Prototype" (25-50% stable, 100-500 LOC) ⚡⚡⚡
+- Middle: "MVP" (55-70% stable, balanced) ⚡⚡
+- Right: "Production" (75-90% stable, comprehensive) 🛡️
+- Far Right: "Mission-Critical" (92-99% stable, max detail) 🛡️🛡️🛡️
 
 **TEXT:**
-**Not all code needs the same rigor**
+**Stability % auto-controls rigor AND AI verbosity**
 
 **SPEAKER NOTES:**
-"Here's the key insight that makes this whole thing work: not all code requires the same rigor. A quick proof-of-concept to validate product-market fit needs zero percent test coverage and maximum speed. A mission-critical payment system needs 95% coverage and exhaustive security review. The problem with both vibe coding and traditional development is they treat everything the same. We don't."
+"Here's the game-changing insight: LLMs generate production-grade code by default—even for throwaway prototypes. This kills velocity. The solution? Explicit stability percentages that control BOTH quality gates and AI verbosity. A concept idea at 5% stability gets 1-2 paragraph responses from Claude—no code yet. A prototype at 25% gets 100 lines max. An MVP at 65% gets balanced implementations. Production at 90% gets comprehensive, enterprise-grade code. Same methodology, automatic scaling based on stability."
 
 ---
 
-## Slide 18: 12 Maturity Stages
+## Slide 18: 14 Maturity Stages with Stability %
 
 **VISUAL:**
-Table showing progression:
+Table showing progression with stability tracking:
 
-| Stage | Tests | Security | Speed |
-|-------|-------|----------|-------|
-| prototype-alpha | 0% | Skip | ⚡⚡⚡ Max |
-| prototype-rc | 15% | Basic | ⚡⚡⚡ |
-| mvp-beta | 35% | Enhanced | ⚡⚡ |
-| mvp-rc | 50% | Enhanced | ⚡⚡ |
-| production-beta | 75% | Strict | ⚡ |
-| production-rc | 90% | Comprehensive | 🐢 |
-| mission-critical-rc | 95% | Exhaustive | 🐢🐢 |
+| Stage | Stability % | Tests | Security | LLM Verbosity |
+|-------|-------------|-------|----------|---------------|
+| concept-alpha | 5% | 0% | None | 1-2 paragraphs |
+| concept-beta | 15% | 0% | None | 3-5 paragraphs |
+| prototype-alpha | 25% | 0% | None | 50-100 LOC |
+| prototype-beta | 40% | 30% | Basic | 200 LOC |
+| prototype-rc | 50% | 50% | Basic | 500 LOC |
+| mvp-beta | 65% | 70% | Standard | Comprehensive |
+| mvp-rc | 70% | 75% | Standard | Detailed |
+| production-beta | 85% | 85% | Full | Thorough |
+| production-rc | 90% | 90% | Compliance | Extensive |
+| mission-critical-rc | 99% | 95% | Exhaustive | Maximum detail |
 
 **TEXT:**
-**Quality gates auto-tighten as projects mature**
+**Stability % drives quality gates AND AI output size**
 
 **SPEAKER NOTES:**
-"We define 12 granular maturity stages. You start at prototype-alpha with zero tests and maximum speed. As your project proves itself and you move to MVP, quality gates automatically tighten to 35% coverage and enhanced security review. By the time you hit production, you're at 90% coverage. Mission-critical systems get 95% coverage and exhaustive security. Quality scales with criticality."
+"We define 14 granular maturity stages with explicit stability percentages. You start at concept-alpha at 5% stability—Claude gives you 1-2 paragraph responses to validate ideas, no code yet. Prototype-alpha at 25% gets minimal code—100 lines max, zero tests, maximum speed. As your project proves itself and reaches MVP at 65% stability, Claude generates comprehensive implementations with 70% test coverage. By production at 90%, you get extensive enterprise-grade code with full security compliance. Mission-critical at 99% gets maximum detail and 95% coverage. Quality and verbosity scale together with stability."
 
 ---
 
@@ -359,23 +365,30 @@ Code snippet:
 ```yaml
 # .ai-context.yaml
 maturity_stage: mvp-beta
+stability_percentage: 65  # Explicit stability tracking
 
 rigor:
-  test_coverage_minimum: 35
+  test_coverage_minimum: 70
   security_review_required: true
-  agent_review_depth: enhanced
+  agent_review_depth: thorough
 
-velocity_priority: high
-quality_priority: good_enough_for_users
+llm_behavior:
+  verbosity: comprehensive  # Auto-scales with stability %
+  max_code_lines: 1000
+  comments: structured
+  error_handling: comprehensive
 
-philosophy: "Ship fast, learn, iterate"
+velocity_priority: balanced
+quality_priority: production_ready
+
+philosophy: "Quality scales with stability"
 ```
 
 **TEXT:**
-"One config file. Entire quality posture defined."
+"One config file. Quality gates + AI verbosity auto-configured."
 
 **SPEAKER NOTES:**
-"Configuration is simple. One YAML file defines your entire quality posture. Set your maturity stage, and all the quality gates configure automatically. Your AI agents know exactly what rigor to apply."
+"Configuration is simple. One YAML file defines your entire quality posture AND AI behavior. Set your maturity stage and stability percentage—all quality gates and LLM verbosity configure automatically. A 5% stable concept gets brief paragraphs. A 65% stable MVP gets balanced code with comprehensive error handling. A 90% stable production system gets enterprise implementations. Your AI agents know exactly what rigor to apply and how verbose to be. Quality and verbosity scale together with stability."
 
 ---
 

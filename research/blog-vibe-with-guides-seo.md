@@ -182,37 +182,52 @@ Here's the key insight: **not all code requires the same rigor**.
 
 A quick POC to validate product-market fit needs **0% test coverage** and **maximum speed**. A mission-critical payment system needs **95% coverage** and **exhaustive security review**.
 
-#### 12 Maturity Stages: From Prototype to Mission-Critical
+#### 14 Maturity Stages with Stability Tracking: From Concept to Mission-Critical
 
-The framework defines **12 granular maturity levels** that automatically adjust quality gates:
+**The LLM Verbosity Problem**: AI agents generate production-grade code by default—even for early experiments. A 25% stable prototype doesn't need enterprise documentation, comprehensive error handling, or exhaustive tests, but without guidance, Claude will generate them anyway, slowing down iteration.
 
-| Stage | Test Coverage | Security Review | Documentation | ADR Enforcement | Speed |
-|-------|--------------|-----------------|---------------|-----------------|-------|
-| **prototype-alpha** | 0% | Skip | None | None | ⚡⚡⚡ Maximum |
-| **prototype-beta** | 5% | Basic | Minimal | Optional | ⚡⚡⚡ |
-| **prototype-rc** | 15% | Standard | Basic | Recommended | ⚡⚡ |
-| **mvp-alpha** | 25% | Standard | Standard | Required | ⚡⚡ |
-| **mvp-beta** | 35% | Enhanced | Standard | Required | ⚡⚡ |
-| **mvp-rc** | 50% | Enhanced | Good | Strict | ⚡ |
-| **production-alpha** | 60% | Strict | Good | Strict | ⚡ |
-| **production-beta** | 75% | Strict | Comprehensive | Strict | 🐢 |
-| **production-rc** | 90% | Comprehensive | Comprehensive | Strict | 🐢 |
-| **mission-critical-alpha** | 90% | Comprehensive | Comprehensive | Absolute | 🐢🐢 |
-| **mission-critical-beta** | 93% | Exhaustive | Exhaustive | Absolute | 🐢🐢 |
-| **mission-critical-rc** | 95% | Exhaustive | Exhaustive | Absolute | 🐢🐢🐢 |
+**The Solution**: Explicit stability percentages (0-100%) that automatically control AI verbosity and rigor.
+
+The framework defines **14 granular maturity stages** with stability tracking:
+
+| Stage | Stability % | Test Coverage | Security Review | Documentation | ADR Enforcement | LLM Verbosity |
+|-------|-------------|--------------|-----------------|---------------|-----------------|---------------|
+| **Concept-alpha** | 5% | 0% | None | None | None | Minimal (1-2 para) |
+| **Concept-beta** | 15% | 0% | None | Brief sketch | None | Brief (3-5 para) |
+| **prototype-alpha** | 25% | 0% | None | None | None | Low (50-100 LOC) |
+| **prototype-beta** | 40% | 30% | None | Minimal | Optional | Moderate (200 LOC) |
+| **prototype-rc** | 50% | 50% | Basic | Basic | Lightweight | Growing (500 LOC) |
+| **mvp-alpha** | 55% | 60% | Basic | Standard | Core patterns | Balanced |
+| **mvp-beta** | 65% | 70% | Standard | Comprehensive | Required | Comprehensive |
+| **mvp-rc** | 70% | 75% | Standard | Complete | Strict | Detailed |
+| **production-alpha** | 75% | 80% | Required | Enterprise | Strict | Complete |
+| **production-beta** | 85% | 85% | Full | Complete + ADRs | Versioned | Thorough |
+| **production-rc** | 90% | 90% | Compliance | Audit-ready | Immutable | Extensive |
+| **mission-critical-alpha** | 92% | 90% | Full | Immutable | Audit trail | Enterprise |
+| **mission-critical-beta** | 95% | 95% | Exhaustive | Immutable + Legal | Compliance | Exhaustive |
+| **mission-critical-rc** | 99% | 95% | Exhaustive + Audit | Immutable + Audit | Maximum | Maximum detail |
 
 **Configure in `.ai-context.yaml`:**
 ```yaml
 maturity_stage: mvp-beta
+stability_percentage: 65  # Explicit stability tracking
 rigor:
-  test_coverage_minimum: 35
+  test_coverage_minimum: 70
   security_review_required: true
-  agent_review_depth: enhanced
-velocity_priority: high
-quality_priority: good_enough_for_users
+  agent_review_depth: thorough
+llm_behavior:
+  verbosity: comprehensive  # Scales automatically with stability %
+  max_code_lines: 1000
+  comments: structured
+  error_handling: comprehensive
+  documentation: full_api_docs
+velocity_priority: balanced
+quality_priority: production_ready
 ```
 
-> 🎚️ **Adaptive Quality**: Quality gates **automatically tighten** as your project matures from POC → MVP → Production → Mission Critical. You get the speed you need early, and the safety you need later.
+> 🎚️ **Adaptive Quality & Verbosity**: Quality gates and AI verbosity **automatically scale** as your project matures from Concept (5% stable) → Prototype (25-50%) → MVP (55-70%) → Production (75-90%) → Mission Critical (90-99%). You get minimal overhead for early exploration and maximum rigor for production systems.
+
+> 💡 **The Key Insight**: A concept-alpha project (5% stable) gets 1-2 paragraph responses from Claude. A production-rc project (90% stable) gets complete enterprise-grade implementations. Same methodology, different rigor—automatically.
 
 #### Technical Constraints: Stop Wasting Cycles
 

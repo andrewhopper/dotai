@@ -660,68 +660,171 @@ jobs:
 
 Different project maturity levels require different levels of rigor, validation, and process enforcement. An AI-native SDLC must adapt its behavior based on the project's maturity stage.
 
-### Maturity Stages: Two-Tier System
+**Critical Problem**: LLMs tend to generate overly verbose, production-grade code even for early-stage explorations. A prototype at 30% stability doesn't need enterprise-grade documentation, comprehensive error handling, or exhaustive tests—but without explicit guidance, AI agents will generate them anyway, slowing down iteration.
 
-**Tier 1: Maturity Level** (4 major stages)
-- Prototype
-- MVP
-- Production
-- Mission Critical
+**Solution**: Explicit maturity stages with **stability percentages** that control AI verbosity and rigor. Early stages (20-40% stable) get concise, functional code. Mature stages (90%+ stable) get comprehensive, production-grade implementations.
+
+### Maturity Stages: Enhanced Two-Tier System with Stability Tracking
+
+**Tier 1: Maturity Level** (5 major stages with stability %)
+- **Concept** (0-20% stable): Ideation and validation
+- **Prototype** (20-50% stable): Proof of concept and exploration
+- **MVP** (50-70% stable): Minimum viable product
+- **Production** (70-90% stable): Live system serving users
+- **Mission Critical** (90-100% stable): Enterprise and regulated systems
 
 **Tier 2: Sub-Stage** (progressive refinement within each level)
 - **alpha**: Very early, maximum flexibility, minimal rigor
 - **beta**: Getting stable, moderate rigor, patterns emerging
 - **rc** (release candidate): Almost ready for next level, increased rigor
 
-**Combined Notation**: `{level}-{substage}`
-- Examples: `prototype-alpha`, `mvp-beta`, `production-rc`
+**Combined Notation**: `{level}-{substage}` with implicit stability %
+- Examples: `concept-alpha` (5%), `prototype-beta` (40%), `mvp-rc` (65%), `production-beta` (85%)
 
-**Key Insight**: Sub-stages provide **granular control** within each maturity level. A `prototype-alpha` needs even less rigor than `prototype-rc`. This allows AI agents to operate with appropriate flexibility in early exploration phases while progressively tightening requirements as the project stabilizes.
+**Key Insights**:
+1. **Sub-stages provide granular control** within each maturity level. A `prototype-alpha` (25% stable) needs even less rigor than `prototype-rc` (50% stable)
+2. **Stability percentages guide AI verbosity**: 20% stable → brief code, minimal docs. 90% stable → comprehensive implementation
+3. **LLM behavior scales automatically**: AI agents adjust detail level, documentation depth, test coverage, and error handling based on stability percentage
 
 ### Sub-Stage Progression
 
 ```
-Prototype Journey:
-prototype-alpha → prototype-beta → prototype-rc → MVP-alpha
-
-MVP Journey:
-mvp-alpha → mvp-beta → mvp-rc → production-alpha
-
-Production Journey:
-production-alpha → production-beta → production-rc → mission-critical-alpha
+Complete Journey:
+concept-alpha (5%) → concept-beta (15%) → prototype-alpha (25%) →
+prototype-beta (40%) → prototype-rc (50%) → mvp-alpha (55%) →
+mvp-beta (65%) → mvp-rc (70%) → production-alpha (75%) →
+production-beta (85%) → production-rc (90%) → mission-critical-alpha (92%) →
+mission-critical-beta (95%) → mission-critical-rc (99%)
 ```
 
 **When to Progress Sub-Stages**:
+- **concept → prototype**: Core idea validated, technical feasibility confirmed
 - **alpha → beta**: Core functionality proven, architecture starting to solidify
 - **beta → rc**: Ready for wider testing, minimal breaking changes expected
 - **rc → next-level-alpha**: Graduation criteria met, ready for increased rigor
 
-### Rigor Progression Across Sub-Stages
+### Rigor and Verbosity Progression Across All Stages
 
-| Stage | Test Coverage | ADRs | Locks | Review | Philosophy |
-|-------|--------------|------|-------|--------|------------|
-| **prototype-alpha** | 0% | None | None | Skip | "Does it run?" |
-| **prototype-beta** | 30% | Optional | Minimal | Fast | "Core works" |
-| **prototype-rc** | 50% | Lightweight | Moderate | Standard | "MVP ready" |
-| **mvp-alpha** | 60% | Core patterns | Moderate | Standard | "Ship it" |
-| **mvp-beta** | 70% | Required | Moderate | Thorough | "Scale it" |
-| **mvp-rc** | 75% | Strict | Strict | Thorough | "Production ready" |
-| **production-alpha** | 80% | Strict | Strict | Comprehensive | "Reliable" |
-| **production-beta** | 85% | Versioned | Change control | Multi-agent | "Scalable" |
-| **production-rc** | 90% | Immutable | Maximum | Exhaustive | "Enterprise ready" |
-| **mission-critical-alpha** | 90% | Audit trail | Maximum | Multi-stakeholder | "Zero tolerance" |
-| **mission-critical-beta** | 95% | Compliance | Maximum | + Legal review | "Compliance" |
-| **mission-critical-rc** | 95% | Immutable | Maximum | + Audit | "Mission critical" |
+| Stage | Stability | Test Coverage | ADRs | Locks | Review | LLM Verbosity | Philosophy |
+|-------|-----------|--------------|------|-------|--------|---------------|------------|
+| **concept-alpha** | 5% | 0% | None | None | Skip | Minimal (1-2 para) | "Is this viable?" |
+| **concept-beta** | 15% | 0% | None | None | Skip | Brief (3-5 para) | "Validate approach" |
+| **prototype-alpha** | 25% | 0% | None | None | Skip | Low (50-100 LOC) | "Does it run?" |
+| **prototype-beta** | 40% | 30% | Optional | Minimal | Fast | Moderate (200 LOC) | "Core works" |
+| **prototype-rc** | 50% | 50% | Lightweight | Moderate | Standard | Growing (500 LOC) | "MVP ready" |
+| **mvp-alpha** | 55% | 60% | Core patterns | Moderate | Standard | Balanced | "Ship it" |
+| **mvp-beta** | 65% | 70% | Required | Moderate | Thorough | Comprehensive | "Scale it" |
+| **mvp-rc** | 70% | 75% | Strict | Strict | Thorough | Detailed | "Production ready" |
+| **production-alpha** | 75% | 80% | Strict | Strict | Comprehensive | Complete | "Reliable" |
+| **production-beta** | 85% | 85% | Versioned | Change control | Multi-agent | Thorough | "Scalable" |
+| **production-rc** | 90% | 90% | Immutable | Maximum | Exhaustive | Extensive | "Enterprise ready" |
+| **mission-critical-alpha** | 92% | 90% | Audit trail | Maximum | Multi-stakeholder | Enterprise-grade | "Zero tolerance" |
+| **mission-critical-beta** | 95% | 95% | Compliance | Maximum | + Legal review | Exhaustive | "Compliance" |
+| **mission-critical-rc** | 99% | 95% | Immutable | Maximum | + Audit | Maximum detail | "Mission critical" |
 
 **Key Benefits**:
-- **Granular Control**: 12 stages instead of 4 provides fine-grained progression
-- **Reduced Friction**: Prototype-alpha has essentially zero overhead - perfect for exploration
+- **Granular Control**: 14 stages instead of 4 provides ultra-fine-grained progression
+- **Prevents Premature Verbosity**: Concept/early-prototype stages have near-zero overhead - perfect for exploration
+- **Stability Tracking**: Explicit percentages guide AI verbosity automatically
 - **Smooth Transitions**: Moving from beta → rc within same level is easier than jumping levels
-- **Business Alignment**: Sub-stages map to real project milestones (demo ready, investor pitch, soft launch)
+- **Business Alignment**: Sub-stages map to real project milestones (idea validation, demo ready, investor pitch, soft launch)
+- **LLM Behavior Scaling**: AI agents automatically adjust code detail, docs, tests based on stability %
 
 ### Maturity Levels with Sub-Stages
 
-#### Level 0: Prototype / Proof of Concept
+#### Level -1: Concept / Ideation (0-20% Stable)
+
+**Purpose**: Validate the core idea before investing in implementation
+
+**Characteristics:**
+- Pure ideation and exploration
+- No code yet (or minimal sketches)
+- High-level problem statement
+- Feasibility assessment
+- Rapid pivoting expected
+
+**Sub-Stage Configurations:**
+
+##### Concept-alpha (Ultra-Minimal Exploration) - 5% Stable
+**When**: Day 1-3, initial idea validation
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | None - too early for decisions |
+| **Locks** | None - no code exists yet |
+| **Agent Behavior** | Answer questions concisely (2-3 paragraphs max) |
+| **Human Review** | Informal discussion |
+| **Code** | None or minimal pseudo-code sketches |
+| **Documentation** | Brief problem statement only |
+| **LLM Verbosity** | **MINIMAL**: 1-2 paragraphs, no code |
+| **Philosophy** | "Is this idea worth pursuing?" |
+
+```yaml
+maturity_stage: concept-alpha
+stability_percentage: 5
+rigor:
+  adr_enforcement: none
+  lock_enforcement: none
+  test_coverage_minimum: 0
+  agent_review_depth: skip
+  human_approval_required: false
+  code_generation: discouraged  # idea validation only
+  documentation_required: none
+llm_behavior:
+  verbosity: minimal
+  response_length: 1-3_paragraphs
+  code_examples: avoid
+  focus: feasibility_assessment
+velocity_priority: maximum_exploration
+quality_priority: idea_validation
+philosophy: "Validate before building anything"
+```
+
+##### Concept-beta (Approach Validation) - 15% Stable
+**When**: Week 1, technical approach starting to crystalize
+
+| Aspect | Approach |
+|--------|----------|
+| **ADRs** | None - still exploring options |
+| **Locks** | None |
+| **Agent Behavior** | Provide 2-3 alternative approaches, brief pros/cons |
+| **Human Review** | Decision on direction |
+| **Code** | Simple proof-of-concept snippets (10-30 lines max) |
+| **Documentation** | Architecture sketch (1-2 paragraphs) |
+| **LLM Verbosity** | **BRIEF**: 3-5 paragraphs, minimal code examples |
+| **Philosophy** | "Which approach should we take?" |
+
+```yaml
+maturity_stage: concept-beta
+stability_percentage: 15
+rigor:
+  adr_enforcement: none
+  lock_enforcement: none
+  test_coverage_minimum: 0
+  agent_review_depth: skip
+  human_approval_required: false
+  code_generation: minimal_examples_only
+  documentation_required: minimal
+llm_behavior:
+  verbosity: brief
+  response_length: 3-5_paragraphs
+  code_examples: minimal_snippets  # 10-30 lines max
+  provide_alternatives: true  # 2-3 options
+  focus: approach_comparison
+velocity_priority: rapid_validation
+quality_priority: direction_finding
+philosophy: "Sketch the path, don't build the road yet"
+```
+
+**Transition Criteria (Concept → Prototype)**:
+- ✅ Core idea validated as technically feasible
+- ✅ High-level approach selected
+- ✅ Basic architecture direction confirmed
+- ✅ Ready to write functional code
+
+---
+
+#### Level 0: Prototype / Proof of Concept (20-50% Stable)
 
 **Characteristics:**
 - Rapid iteration and experimentation
@@ -732,7 +835,7 @@ production-alpha → production-beta → production-rc → mission-critical-alph
 
 **Sub-Stage Configurations:**
 
-##### Prototype-alpha (Ultra-Fast Exploration)
+##### Prototype-alpha (Ultra-Fast Exploration) - 25% Stable
 **When**: Day 1-7, proving basic concept feasibility
 
 | Aspect | Approach |
@@ -748,9 +851,11 @@ production-alpha → production-beta → production-rc → mission-critical-alph
 | **CI/CD** | None - run locally |
 | **Security** | None - hardcoded credentials OK for now |
 | **Test Coverage** | 0% acceptable |
+| **LLM Verbosity** | **LOW**: 50-100 lines max, minimal comments |
 
 ```yaml
 maturity_stage: prototype-alpha
+stability_percentage: 25
 rigor:
   adr_enforcement: none
   lock_enforcement: none
@@ -760,12 +865,18 @@ rigor:
   security_review_required: false
   performance_testing: false
   documentation_required: false
+llm_behavior:
+  verbosity: low
+  max_code_lines: 100
+  comments: minimal
+  error_handling: basic_only
+  focus: core_functionality
 velocity_priority: maximum_speed
 quality_priority: proof_of_concept
 philosophy: "Move fast, break things, learn quickly"
 ```
 
-##### Prototype-beta (Stabilizing Core)
+##### Prototype-beta (Stabilizing Core) - 40% Stable
 **When**: Week 2-4, core functionality proven, starting to show others
 
 | Aspect | Approach |
@@ -781,9 +892,11 @@ philosophy: "Move fast, break things, learn quickly"
 | **CI/CD** | Basic lint and build |
 | **Security** | Move secrets to env vars |
 | **Test Coverage** | 30% acceptable |
+| **LLM Verbosity** | **MODERATE**: 200 lines max, inline comments for complex logic |
 
 ```yaml
 maturity_stage: prototype-beta
+stability_percentage: 40
 rigor:
   adr_enforcement: optional
   lock_enforcement: minimal
@@ -793,12 +906,18 @@ rigor:
   security_review_required: false
   performance_testing: false
   documentation_required: minimal
+llm_behavior:
+  verbosity: moderate
+  max_code_lines: 200
+  comments: inline_for_complex
+  error_handling: main_flows_only
+  focus: core_features
 velocity_priority: speed
 quality_priority: functionality
 philosophy: "Core features must work, polish can wait"
 ```
 
-##### Prototype-rc (Ready for MVP)
+##### Prototype-rc (Ready for MVP) - 50% Stable
 **When**: Week 5-8, demonstrable to stakeholders, considering MVP investment
 
 | Aspect | Approach |
@@ -814,9 +933,11 @@ philosophy: "Core features must work, polish can wait"
 | **CI/CD** | Full test suite, staging environment |
 | **Security** | Basic security scan, OWASP awareness |
 | **Test Coverage** | 50% acceptable |
+| **LLM Verbosity** | **GROWING**: 500 lines, proper structure emerging |
 
 ```yaml
 maturity_stage: prototype-rc
+stability_percentage: 50
 rigor:
   adr_enforcement: lightweight
   lock_enforcement: moderate
@@ -826,6 +947,13 @@ rigor:
   security_review_required: basic
   performance_testing: false
   documentation_required: basic
+llm_behavior:
+  verbosity: growing
+  max_code_lines: 500
+  comments: structured
+  error_handling: comprehensive_for_core
+  documentation: api_level
+  focus: consistency
 velocity_priority: balanced
 quality_priority: consistency
 philosophy: "Good enough to become MVP foundation"
