@@ -88,6 +88,12 @@
                         "file_state": "PRESENT"
                     },
                     {
+                        "key": "ARCH-002",
+                        "name": "ARCH-anti-cruft-system-002.md",
+                        "last_modified": "2025-11-03T00:00:00Z",
+                        "file_state": "PRESENT"
+                    },
+                    {
                         "key": "ARCH-ENVS",
                         "name": "environments_deployments.md",
                         "last_modified": "2025-03-26T22:52:40Z",
