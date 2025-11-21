@@ -1,0 +1,66 @@
+{
+  "name": "proto-dotai-context-framework",
+  "current_phase": "IMPLEMENTATION",
+  "phase_number": 8,
+  "started": "2024-03-28T00:00:00Z",
+  "last_updated": "2025-11-20T00:00:00Z",
+  "phase_history": [
+    {
+      "phase": "IMPLEMENTATION",
+      "phase_number": 8,
+      "started": "2024-03-28T00:00:00Z",
+      "completed": null,
+      "deliverables_completed": false
+    }
+  ],
+  "status": "ACTIVE",
+  "description": "Draft standard for creating and managing context in AI coding projects. Provides tool-agnostic structured documentation, development workflows, and validation processes.",
+  "success_criteria": [
+    "CLI tool functional (init, validate, scan-secrets)",
+    "Standardized .ai directory structure",
+    "Automated validation against facts and standards",
+    "Secrets scanning integration",
+    "Cross-tool compatibility (.cursorrules, .clinerules)"
+  ],
+  "metadata": {
+    "tech_stack": [
+      "TypeScript",
+      "Node.js",
+      "CLI"
+    ],
+    "xip_status": "none",
+    "priority": "high",
+    "test_track": null,
+    "prototype_type": "submodule",
+    "target_output": "CLI Tool + Framework",
+    "target_audience": "Developers using AI coding tools",
+    "domain": "ai-tooling",
+    "categories": [
+      "ai-context",
+      "documentation",
+      "validation",
+      "developer-tools"
+    ],
+    "tags": [
+      "submodule",
+      "external-repo"
+    ],
+    "number": "078",
+    "target_company_maturity": [
+      "mvp"
+    ],
+    "github_repo": "https://github.com/andrewhopper/dotai"
+  },
+  "version": "0.1.0",
+  "version_history": [
+    {
+      "version": "0.1.0",
+      "date": "2025-11-20T00:00:00Z",
+      "phase": "IMPLEMENTATION",
+      "change_type": "major",
+      "description": "Added as submodule to monorepo"
+    }
+  ],
+  "uuid": "dotai",
+  "directory_name": "proto-dotai-context-framework"
+}
